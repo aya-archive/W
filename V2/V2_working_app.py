@@ -63,11 +63,30 @@ def create_churn_distribution_pie(prediction_data=None):
     
     return fig
 
-def create_key_metrics_bar():
+def create_key_metrics_bar(prediction_data=None):
     """Create bar chart for key metrics"""
-    categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
-    values = [1247, 717, 374, 156]
-    colors = ['#4A90E2', '#2E8B57', '#FFD700', '#DC143C']
+    if prediction_data is None or len(prediction_data) == 0:
+        # Default empty state
+        categories = ['No Data Available']
+        values = [1]
+        colors = ['#CCCCCC']
+    else:
+        # Count risk levels from prediction data
+        risk_counts = {'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0}
+        
+        for row in prediction_data:
+            if len(row) >= 3:  # Ensure we have at least 3 columns
+                risk_level = row[2]  # Risk Level is the 3rd column
+                if risk_level in risk_counts:
+                    risk_counts[risk_level] += 1
+        
+        # Calculate total customers
+        total_customers = sum(risk_counts.values())
+        
+        # Create categories and values
+        categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
+        values = [total_customers, risk_counts['Low Risk'], risk_counts['Medium Risk'], risk_counts['High Risk']]
+        colors = ['#4A90E2', '#2E8B57', '#FFD700', '#DC143C']
     
     fig = go.Figure(data=[go.Bar(
         x=categories,
@@ -275,7 +294,7 @@ def create_gradio_interface():
                     # Key Metrics Bar Chart
                     metrics_bar_chart = gr.Plot(
                         value=create_key_metrics_bar(),
-                        label="Customer Risk Distribution",
+                        label="Customer Risk Distribution (Run prediction to see data)",
                         show_label=True
                     )
             
@@ -330,7 +349,7 @@ def create_gradio_interface():
         run_prediction_btn.click(
             run_prediction,
             inputs=[csv_file],
-            outputs=[newai_status, results_table, risk_chart, churn_pie_chart]
+            outputs=[newai_status, results_table, risk_chart, churn_pie_chart, metrics_bar_chart]
         )
         
         
