@@ -102,28 +102,8 @@ def create_gradio_interface():
         )
         
         # Dashboard Tab
-        with gr.Tab("📊 Dashboard"):
-            gr.Markdown("### 📊 Analytics Dashboard")
-            
-            with gr.Row():
-                with gr.Column(scale=2):
-                    # Key Metrics
-                    gr.Markdown("### 🎯 Key Metrics")
-                    gr.Markdown("**Total Customers:** 1,247")
-                    gr.Markdown("**High Risk:** 156")
-                    gr.Markdown("**Medium Risk:** 374")
-                    gr.Markdown("**Low Risk:** 717")
-                
-                with gr.Column(scale=3):
-                    # Status
-                    dashboard_status = gr.Textbox(
-                        label="Dashboard Status",
-                        value="Ready to run analytics",
-                        interactive=False
-                    )
-        
-        # NewAI Tab
-        with gr.Tab("🧠 NewAI Predictions"):
+        # Churn AI Tab
+        with gr.Tab("🧠 Churn AI"):
             gr.Markdown("### 🧠 NewAI Churn Prediction Model")
             
             with gr.Row():
@@ -171,6 +151,27 @@ def create_gradio_interface():
                     # Risk Distribution
                     risk_chart = gr.Textbox(
                         label="Risk Distribution",
+                        interactive=False
+                    )
+            
+            # Dashboard Section (moved from Dashboard tab)
+            gr.Markdown("---")
+            gr.Markdown("### 📊 Analytics Dashboard")
+            
+            with gr.Row():
+                with gr.Column(scale=2):
+                    # Key Metrics
+                    gr.Markdown("### 🎯 Key Metrics")
+                    gr.Markdown("**Total Customers:** 1,247")
+                    gr.Markdown("**High Risk:** 156")
+                    gr.Markdown("**Medium Risk:** 374")
+                    gr.Markdown("**Low Risk:** 717")
+                
+                with gr.Column(scale=3):
+                    # Status
+                    dashboard_status = gr.Textbox(
+                        label="Dashboard Status",
+                        value="Ready to run analytics",
                         interactive=False
                     )
         
