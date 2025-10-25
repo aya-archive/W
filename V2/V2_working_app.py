@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI app
 app = FastAPI(
-    title="V2 A.U.R.A - Adaptive User Retention Assistant",
-    description="V2 Unified AI-Powered Client Retention Platform",
+    title="A.U.R.A - Adaptive User Retention Assistant",
+    description="Unified AI-Powered Client Retention Platform",
     version="2.0.0"
 )
 
@@ -115,7 +115,7 @@ def create_gradio_interface():
             # Create simple chart data
             risk_counts = pd.Series([p["Risk Level"] for p in predictions]).value_counts()
             
-            status_msg = f"✅ V2 Prediction complete! Analyzed {n_customers} customers."
+            status_msg = f"✅ Prediction complete! Analyzed {n_customers} customers."
             return status_msg, results_df, risk_counts.to_dict()
             
         except Exception as e:
@@ -160,22 +160,22 @@ def create_gradio_interface():
     
     # Create Gradio interface
     with gr.Blocks(
-        title="V2 A.U.R.A - Adaptive User Retention Assistant",
+        title="A.U.R.A - Adaptive User Retention Assistant",
         theme=gr.themes.Soft()
     ) as interface:
         
         # Header
         gr.Markdown(
             """
-            # 🤖 V2 A.U.R.A - Adaptive User Retention Assistant
+            # 🤖 A.U.R.A - Adaptive User Retention Assistant
             
-            **V2 Unified AI-Powered Client Retention Platform**
+            **Unified AI-Powered Client Retention Platform**
             """
         )
         
         # Dashboard Tab
-        with gr.Tab("📊 V2 Dashboard"):
-            gr.Markdown("### 📊 V2 Analytics Dashboard")
+        with gr.Tab("📊 Dashboard"):
+            gr.Markdown("### 📊 Analytics Dashboard")
             
             with gr.Row():
                 with gr.Column(scale=2):
@@ -188,7 +188,7 @@ def create_gradio_interface():
                 
                 with gr.Column(scale=3):
                     # Sample Data Controls
-                    gr.Markdown("### 📈 Data Management")
+                    gr.Markdown("### 📈 Sample Data")
                     load_sample_btn = gr.Button("📊 Load Sample Data", variant="primary")
                     dashboard_status = gr.Textbox(
                         label="Dashboard Status",
@@ -203,14 +203,14 @@ def create_gradio_interface():
                     )
         
         # NewAI Tab
-        with gr.Tab("🧠 V2 NewAI Predictions"):
-            gr.Markdown("### 🧠 V2 NewAI Churn Prediction Model")
+        with gr.Tab("🧠 NewAI Predictions"):
+            gr.Markdown("### 🧠 NewAI Churn Prediction Model")
             
             with gr.Row():
                 with gr.Column(scale=2):
                     # Model Info
-                    gr.Markdown("### 📊 V2 Model Information")
-                    gr.Markdown("**Model:** V2 NewAI Simulation Mode")
+                    gr.Markdown("### 📊 Model Information")
+                    gr.Markdown("**Model:** NewAI Simulation Mode")
                     gr.Markdown("**Accuracy:** 94.2% (Simulated)")
                     gr.Markdown("**Features:** 20+ Customer Attributes")
                     gr.Markdown("**Status:** ✅ Available (Simulation)")
@@ -226,27 +226,27 @@ def create_gradio_interface():
                     
                     # Action Buttons
                     with gr.Row():
-                        run_prediction_btn = gr.Button("🚀 Run V2 NewAI Prediction", variant="primary")
+                        run_prediction_btn = gr.Button("🚀 Run NewAI Prediction", variant="primary")
                         download_sample_btn = gr.Button("📥 Download Sample CSV", variant="secondary")
                     
                     # Status
                     newai_status = gr.Textbox(
                         label="NewAI Status",
-                        value="Ready to upload CSV file and run V2 NewAI prediction",
+                        value="Ready to upload CSV file and run NewAI prediction",
                         interactive=False
                     )
             
             # Results Section
             with gr.Row():
                 with gr.Column():
-                    gr.Markdown("### 📊 V2 NewAI Results")
+                    gr.Markdown("### 📊 NewAI Results")
                     
                     # Results Table
                     results_table = gr.Dataframe(
                         headers=["Customer ID", "Churn Probability", "Risk Level"],
                         datatype=["str", "number", "str"],
                         interactive=False,
-                        label="V2 NewAI Churn Prediction Results"
+                        label="NewAI Churn Prediction Results"
                     )
                     
                     # Risk Distribution
@@ -255,38 +255,15 @@ def create_gradio_interface():
                         interactive=False
                     )
         
-        # Data Management Tab
-        with gr.Tab("📁 V2 Data Management"):
-            gr.Markdown("### 📁 V2 Data Management")
-            
-            with gr.Row():
-                with gr.Column():
-                    # File Upload
-                    gr.Markdown("### 📤 Upload Data Files")
-                    csv_files = gr.File(
-                        label="Choose CSV Files",
-                        file_types=[".csv"],
-                        file_count="multiple"
-                    )
-                    
-                    with gr.Row():
-                        upload_files_btn = gr.Button("📤 Upload Files", variant="primary")
-                    
-                    # Status
-                    data_status = gr.Textbox(
-                        label="Data Management Status",
-                        value="Ready to upload and process data files",
-                        interactive=False
-                    )
         
         # AI Chatbot Tab
-        with gr.Tab("💬 V2 AI Assistant"):
-            gr.Markdown("### 💬 V2 AI Assistant")
+        with gr.Tab("💬 AI Assistant"):
+            gr.Markdown("### 💬 AI Assistant")
             
             # Chat Interface
             chatbot = gr.Chatbot(
-                label="V2 AI Assistant Chat",
-                value=[{"role": "assistant", "content": "Hello! I'm your V2 AURA assistant. How can I help you today?"}],
+                label="AI Assistant Chat",
+                value=[{"role": "assistant", "content": "Hello! I'm your AURA assistant. How can I help you today?"}],
                 type="messages"
             )
             
@@ -322,9 +299,9 @@ def create_gradio_interface():
         
         # Chatbot events
         def respond(message, history):
-            """V2 Local AI chatbot response"""
+            """Local AI chatbot response"""
             try:
-                # Get V2 Local AI instance
+                # Get Local AI instance
                 local_ai = get_local_ai()
                 
                 # Process message with local AI
@@ -347,7 +324,7 @@ def create_gradio_interface():
         )
         
         clear_btn.click(
-            lambda: [{"role": "assistant", "content": "Hello! I'm your V2 AURA assistant. How can I help you today?"}],
+            lambda: [{"role": "assistant", "content": "Hello! I'm your AURA assistant. How can I help you today?"}],
             outputs=[chatbot]
         )
         
@@ -356,7 +333,7 @@ def create_gradio_interface():
             """
             ---
             <div style="text-align: center; color: #666; font-size: 0.9em;">
-            🤖 V2 A.U.R.A - Adaptive User Retention Assistant | Built with FastAPI + Gradio | V2 Unified Platform
+            🤖 A.U.R.A - Adaptive User Retention Assistant | Built with FastAPI + Gradio | Unified Platform
             </div>
             """,
             elem_classes=["footer"]
@@ -377,7 +354,7 @@ async def root():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>V2 A.U.R.A - Adaptive User Retention Assistant</title>
+        <title>A.U.R.A - Adaptive User Retention Assistant</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
@@ -443,25 +420,14 @@ async def root():
     </head>
     <body>
         <div class="container">
-            <h1>🤖 V2 A.U.R.A</h1>
+            <h1>🤖 A.U.R.A</h1>
             <div class="subtitle">Adaptive User Retention Assistant</div>
-            <p>V2 Unified AI-Powered Client Retention Platform</p>
+            <p>Unified AI-Powered Client Retention Platform</p>
             
             <div class="buttons">
-                <a href="/gradio/" class="btn">🎨 Open Dashboard</a>
-                <a href="/docs" class="btn">📚 API Documentation</a>
-                <a href="/api/v2/health" class="btn">🔍 Health Check</a>
+                <a href="/gradio/" class="btn">🎨 Try AURA</a>
             </div>
             
-            <div class="features">
-                <h3>🚀 V2 Features</h3>
-                <div class="feature">✅ Unified Platform - Single app for everything</div>
-                <div class="feature">✅ FastAPI Backend - Modern, fast, scalable</div>
-                <div class="feature">✅ Gradio Interface - Beautiful, interactive UI</div>
-                <div class="feature">✅ NewAI Integration - 94.2% accuracy churn prediction</div>
-                <div class="feature">✅ RESTful API - Programmatic access</div>
-                <div class="feature">✅ Real-time Analytics - Live data processing</div>
-            </div>
         </div>
     </body>
     </html>
@@ -472,7 +438,7 @@ async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "service": "V2 Working AURA Service",
+        "service": "Working AURA Service",
         "model_available": True,
         "models_loaded": True,
         "version": "2.0.0",
@@ -483,7 +449,7 @@ async def health_check():
 async def get_model_info():
     """Get model information"""
     return {
-        "name": "V2 Working NewAI Churn Prediction Model",
+        "name": "Working NewAI Churn Prediction Model",
         "type": "Machine Learning",
         "version": "2.0.0",
         "features": [
@@ -505,7 +471,7 @@ async def get_model_info():
 
 @app.get("/api/v2/ai-info")
 async def get_ai_info():
-    """Get V2 Local AI information"""
+    """Get Local AI information"""
     try:
         local_ai = get_local_ai()
         return local_ai.get_ai_info()
@@ -513,25 +479,29 @@ async def get_ai_info():
         logger.error(f"❌ Error getting AI info: {e}")
         return {"error": "Failed to get AI information"}
 
+@app.get("/api/v2/ai-test")
+async def test_ai_connection():
+    """Test Ollama AI connection"""
+    try:
+        local_ai = get_local_ai()
+        return local_ai.test_connection()
+    except Exception as e:
+        logger.error(f"❌ Error testing AI connection: {e}")
+        return {"status": "error", "message": f"Connection test failed: {str(e)}"}
+
 def main():
-    """Main function to run the V2 Working AURA app"""
-    print("🤖 V2 A.U.R.A - Adaptive User Retention Assistant")
+    """Main function to run the Working AURA app"""
+    print("🤖 A.U.R.A - Adaptive User Retention Assistant")
     print("=" * 60)
-    print("V2 Unified AI-Powered Client Retention Platform")
+    print("Unified AI-Powered Client Retention Platform")
     print("=" * 60)
     print("")
-    print("🚀 Features:")
-    print("   • FastAPI Backend with RESTful API")
-    print("   • Gradio Interface with Interactive Dashboard")
-    print("   • NewAI Model Integration (Simulation Mode)")
-    print("   • Real-time Analytics and Predictions")
-    print("   • Unified Platform Architecture")
     print("")
     print("🌐 Access Points:")
-    print("   • Main Interface: http://localhost:8000")
-    print("   • Gradio Dashboard: http://localhost:8000/gradio/")
-    print("   • API Documentation: http://localhost:8000/docs")
-    print("   • Health Check: http://localhost:8000/api/v2/health")
+    print("   • Main Interface: http://localhost:8001")
+    print("   • Gradio Dashboard: http://localhost:8001/gradio/")
+    print("   • API Documentation: http://localhost:8001/docs")
+    print("   • Health Check: http://localhost:8001/api/v2/health")
     print("")
     print("🛑 Press Ctrl+C to stop the server")
     print("=" * 60)
@@ -540,7 +510,7 @@ def main():
     uvicorn.run(
         "V2_working_app:app",
         host="0.0.0.0",
-        port=8000,
+        port=8001,
         reload=False,
         log_level="info"
     )

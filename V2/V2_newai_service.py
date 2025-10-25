@@ -22,8 +22,9 @@ class V2NewAIService:
     
     def __init__(self, models_dir: str = "V2_models", data_dir: str = "V2_data"):
         """Initialize V2 NewAI service"""
-        self.models_dir = Path(models_dir)
-        self.data_dir = Path(data_dir)
+        # Use relative paths from V2 folder
+        self.models_dir = Path(__file__).parent / models_dir
+        self.data_dir = Path(__file__).parent / data_dir
         
         # Model paths
         self.model_path = self.models_dir / "aura_churn_model.pkl"

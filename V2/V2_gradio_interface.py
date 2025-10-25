@@ -51,7 +51,7 @@ class V2GradioInterface:
             })
             
             self.data_loaded = True
-            return "✅ V2 Sample data generated successfully!"
+            return "✅ Sample data generated successfully!"
             
         except Exception as e:
             logger.error(f"❌ Error loading sample data: {e}")
@@ -131,68 +131,25 @@ class V2GradioInterface:
                 marker_colors=['#10b981', '#f59e0b', '#ef4444']
             )])
             fig.update_layout(
-                title="V2 NewAI Churn Risk Distribution",
+                title="NewAI Churn Risk Distribution",
                 font=dict(size=12)
             )
             
             high_risk_count = results.get("high_risk", 0)
-            status_msg = f"✅ V2 NewAI prediction complete! Analyzed {results.get('total_customers', 0)} customers. Found {high_risk_count} high-risk customers."
+            status_msg = f"✅ NewAI prediction complete! Analyzed {results.get('total_customers', 0)} customers. Found {high_risk_count} high-risk customers."
             
-            logger.info(f"✅ V2 NewAI prediction complete: {results.get('total_customers', 0)} customers analyzed")
+            logger.info(f"✅ NewAI prediction complete: {results.get('total_customers', 0)} customers analyzed")
             return status_msg, results_df, fig
             
         except Exception as e:
-            logger.error(f"❌ Error in V2 NewAI prediction: {e}")
+            logger.error(f"❌ Error in NewAI prediction: {e}")
             return f"❌ Error processing CSV file: {str(e)}", None, None
     
-    def generate_sample_csv(self) -> str:
-        """Generate sample CSV data"""
-        try:
-            # Create sample data matching the original format
-            np.random.seed(42)
-            n_customers = 100
-            
-            sample_data = {
-                'customerID': [f'CUST_{i:04d}' for i in range(1, n_customers + 1)],
-                'gender': np.random.choice(['Male', 'Female'], n_customers),
-                'SeniorCitizen': np.random.choice([0, 1], n_customers),
-                'Partner': np.random.choice(['Yes', 'No'], n_customers),
-                'Dependents': np.random.choice(['Yes', 'No'], n_customers),
-                'tenure': np.random.randint(1, 60, n_customers),
-                'PhoneService': np.random.choice(['Yes', 'No'], n_customers),
-                'MultipleLines': np.random.choice(['Yes', 'No', 'No phone service'], n_customers),
-                'InternetService': np.random.choice(['DSL', 'Fiber optic', 'No'], n_customers),
-                'OnlineSecurity': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'OnlineBackup': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'DeviceProtection': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'TechSupport': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingTV': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingMovies': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'Contract': np.random.choice(['Month-to-month', 'One year', 'Two year'], n_customers),
-                'PaperlessBilling': np.random.choice(['Yes', 'No'], n_customers),
-                'PaymentMethod': np.random.choice(['Electronic check', 'Mailed check', 'Bank transfer (automatic)', 'Credit card (automatic)'], n_customers),
-                'MonthlyCharges': np.random.uniform(20, 100, n_customers),
-                'TotalCharges': np.random.uniform(100, 5000, n_customers),
-                'Churn': np.random.choice(['Yes', 'No'], n_customers)
-            }
-            
-            sample_df = pd.DataFrame(sample_data)
-            return sample_df.to_csv(index=False)
-            
-        except Exception as e:
-            logger.error(f"❌ Error generating sample CSV: {e}")
-            return ""
-    
-    def download_predictions(self, results_df: pd.DataFrame) -> str:
-        """Download prediction results as CSV"""
-        if results_df is None or results_df.empty:
-            return None
-        return results_df.to_csv(index=False)
     
     def create_dashboard_interface(self) -> gr.Blocks:
         """Create the main dashboard interface"""
         with gr.Blocks(
-            title="V2 A.U.R.A - Adaptive User Retention Assistant",
+            title="A.U.R.A - Adaptive User Retention Assistant",
             theme=gr.themes.Soft(),
             css="""
             .gradio-container {
@@ -204,17 +161,17 @@ class V2GradioInterface:
             # Header
             gr.Markdown(
                 """
-                # 🤖 V2 A.U.R.A - Adaptive User Retention Assistant
+                # 🤖 A.U.R.A - Adaptive User Retention Assistant
                 
-                **V2 Unified AI-Powered Client Retention Platform**
+                **Unified AI-Powered Client Retention Platform**
                 """
             )
             
             # Dashboard Tab
-            with gr.Tab("📊 V2 Dashboard"):
+            with gr.Tab("📊 Dashboard"):
                 gr.Markdown(
                     """
-                    ### 📊 V2 Analytics Dashboard
+                    ### 📊 Analytics Dashboard
                     
                     Overview of your customer retention analytics with real-time insights.
                     """
@@ -231,7 +188,7 @@ class V2GradioInterface:
                             gr.Markdown("**Low Risk:** 717")
                         
                         # Model Performance
-                        gr.Markdown("### 🧠 V2 Model Performance")
+                        gr.Markdown("### 🧠 Model Performance")
                         with gr.Row():
                             gr.Markdown("**Accuracy:** 94.2%")
                             gr.Markdown("**Precision:** 91.8%")
@@ -253,10 +210,10 @@ class V2GradioInterface:
                         )
             
             # NewAI Tab
-            with gr.Tab("🧠 V2 NewAI Predictions"):
+            with gr.Tab("🧠 NewAI Predictions"):
                 gr.Markdown(
                     """
-                    ### 🧠 V2 NewAI Churn Prediction Model
+                    ### 🧠 NewAI Churn Prediction Model
                     
                     Advanced AI model for customer churn prediction with 94.2% accuracy.
                     """
@@ -265,9 +222,9 @@ class V2GradioInterface:
                 with gr.Row():
                     with gr.Column(scale=2):
                         # Model Info
-                        gr.Markdown("### 📊 V2 Model Information")
+                        gr.Markdown("### 📊 Model Information")
                         with gr.Row():
-                            gr.Markdown("**Model:** V2 NewAI Direct Integration")
+                            gr.Markdown("**Model:** NewAI Direct Integration")
                             gr.Markdown("**Accuracy:** 94.2%")
                             gr.Markdown("**Features:** 20+ Customer Attributes")
                             gr.Markdown("**Status:** ✅ Available")
@@ -293,79 +250,37 @@ class V2GradioInterface:
                         
                         # Action Buttons
                         with gr.Row():
-                            run_prediction_btn = gr.Button("🚀 Run V2 NewAI Prediction", variant="primary")
-                            download_sample_btn = gr.Button("📥 Download Sample CSV", variant="secondary")
-                            download_results_btn = gr.Button("📤 Download Predictions", variant="secondary")
+                            run_prediction_btn = gr.Button("🚀 Run NewAI Prediction", variant="primary")
                         
                         # Status
                         newai_status = gr.Textbox(
                             label="NewAI Status",
-                            value="Ready to upload CSV file and run V2 NewAI prediction",
+                            value="Ready to upload CSV file and run NewAI prediction",
                             interactive=False
                         )
                 
                 # Results Section
                 with gr.Row():
                     with gr.Column():
-                        gr.Markdown("### 📊 V2 NewAI Results")
+                        gr.Markdown("### 📊 NewAI Results")
                         
                         # Results Table
                         results_table = gr.Dataframe(
                             headers=["Customer ID", "Churn Probability", "Risk Level"],
                             datatype=["str", "number", "str"],
                             interactive=False,
-                            label="V2 NewAI Churn Prediction Results"
+                            label="NewAI Churn Prediction Results"
                         )
                         
                         # Risk Distribution Chart
-                        risk_chart = gr.Plot(label="V2 Risk Distribution Chart")
+                        risk_chart = gr.Plot(label="Risk Distribution Chart")
             
-            # Data Management Tab
-            with gr.Tab("📁 V2 Data Management"):
-                gr.Markdown(
-                    """
-                    ### 📁 V2 Data Management
-                    
-                    Upload, process, and manage your customer data.
-                    """
-                )
-                
-                with gr.Row():
-                    with gr.Column():
-                        # File Upload
-                        gr.Markdown("### 📤 Upload Data Files")
-                        csv_files = gr.File(
-                            label="Choose CSV Files",
-                            file_types=[".csv"],
-                            file_count="multiple"
-                        )
-                        
-                        with gr.Row():
-                            upload_files_btn = gr.Button("📤 Upload Files", variant="primary")
-                            process_data_btn = gr.Button("🔄 Process Data", variant="secondary")
-                        
-                        # Status
-                        data_status = gr.Textbox(
-                            label="Data Management Status",
-                            value="Ready to upload and process data files",
-                            interactive=False
-                        )
-                    
-                    with gr.Column():
-                        # Data Summary
-                        gr.Markdown("### 📊 Data Summary")
-                        data_summary = gr.Textbox(
-                            label="Data Summary",
-                            value="No data loaded yet",
-                            interactive=False,
-                            lines=10
-                        )
             
             # AI Chatbot Tab
-            with gr.Tab("💬 V2 AI Assistant"):
+            with gr.Tab("💬 AI Assistant"):
                 gr.Markdown(
                     """
-                    ### 💬 V2 AI Assistant
+                    ### 💬 AI Assistant
                     
                     Chat with the AI assistant for help and guidance.
                     """
@@ -373,8 +288,8 @@ class V2GradioInterface:
                 
                 # Chat Interface
                 chatbot = gr.Chatbot(
-                    label="V2 AI Assistant Chat",
-                    value=[("🤖 AI", "Hello! I'm your V2 AURA assistant. How can I help you today?")]
+                    label="AI Assistant Chat",
+                    value=[("🤖 AI", "Hello! I'm your AURA assistant. How can I help you today?")]
                 )
                 
                 with gr.Row():
@@ -402,16 +317,6 @@ class V2GradioInterface:
                 outputs=[newai_status, results_table, risk_chart]
             )
             
-            download_sample_btn.click(
-                self.generate_sample_csv,
-                outputs=gr.File(label="Download Sample CSV")
-            )
-            
-            download_results_btn.click(
-                self.download_predictions,
-                inputs=[results_table],
-                outputs=gr.File(label="Download Predictions")
-            )
             
             # Data Management events
             upload_files_btn.click(
@@ -428,7 +333,7 @@ class V2GradioInterface:
                 elif "data" in message.lower():
                     return "Upload your CSV files in the Data Management tab. The system supports customer data with features like demographics, usage patterns, and billing information."
                 elif "model" in message.lower():
-                    return "Our V2 NewAI model achieves 94.2% accuracy in churn prediction. It analyzes 20+ customer attributes to provide risk assessments."
+                    return "Our NewAI model achieves 94.2% accuracy in churn prediction. It analyzes 20+ customer attributes to provide risk assessments."
                 else:
                     return "I can help you with churn prediction, data analysis, and retention strategies. What would you like to know?"
             
@@ -451,7 +356,7 @@ class V2GradioInterface:
                 """
                 ---
                 <div style="text-align: center; color: #666; font-size: 0.9em;">
-                🤖 V2 A.U.R.A - Adaptive User Retention Assistant | Built with FastAPI + Gradio | V2 Unified Platform
+                🤖 A.U.R.A - Adaptive User Retention Assistant | Built with FastAPI + Gradio | Unified Platform
                 </div>
                 """,
                 elem_classes=["footer"]
