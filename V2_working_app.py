@@ -13,6 +13,7 @@ import logging
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from V2_local_ai import get_local_ai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -285,7 +286,8 @@ def create_gradio_interface():
             # Chat Interface
             chatbot = gr.Chatbot(
                 label="V2 AI Assistant Chat",
-                value=[("🤖 AI", "Hello! I'm your V2 AURA assistant. How can I help you today?")]
+                value=[{"role": "assistant", "content": "Hello! I'm your V2 AURA assistant. How can I help you today?"}],
+                type="messages"
             )
             
             with gr.Row():
@@ -320,15 +322,20 @@ def create_gradio_interface():
         
         # Chatbot events
         def respond(message, history):
-            """Simple chatbot response"""
-            if "churn" in message.lower():
-                return "Churn prediction helps identify customers at risk of leaving. Use the NewAI tab to run predictions on your data."
-            elif "data" in message.lower():
-                return "Upload your CSV files in the Data Management tab. The system supports customer data with features like demographics, usage patterns, and billing information."
-            elif "model" in message.lower():
-                return "Our V2 NewAI model achieves 94.2% accuracy in churn prediction. It analyzes 20+ customer attributes to provide risk assessments."
-            else:
-                return "I can help you with churn prediction, data analysis, and retention strategies. What would you like to know?"
+            """V2 Local AI chatbot response"""
+            try:
+                # Get V2 Local AI instance
+                local_ai = get_local_ai()
+                
+                # Process message with local AI
+                response = local_ai.process_message(message)
+                
+                # Return in the correct format for messages type
+                return [{"role": "user", "content": message}, {"role": "assistant", "content": response}]
+                
+            except Exception as e:
+                logger.error(f"❌ Error in AI response: {e}")
+                return [{"role": "user", "content": message}, {"role": "assistant", "content": "I apologize, but I encountered an error. Please try again."}]
         
         send_btn.click(
             respond,
@@ -340,7 +347,7 @@ def create_gradio_interface():
         )
         
         clear_btn.click(
-            lambda: [],
+            lambda: [{"role": "assistant", "content": "Hello! I'm your V2 AURA assistant. How can I help you today?"}],
             outputs=[chatbot]
         )
         
@@ -495,6 +502,16 @@ async def get_model_info():
         "available": True,
         "mode": "simulation"
     }
+
+@app.get("/api/v2/ai-info")
+async def get_ai_info():
+    """Get V2 Local AI information"""
+    try:
+        local_ai = get_local_ai()
+        return local_ai.get_ai_info()
+    except Exception as e:
+        logger.error(f"❌ Error getting AI info: {e}")
+        return {"error": "Failed to get AI information"}
 
 def main():
     """Main function to run the V2 Working AURA app"""
