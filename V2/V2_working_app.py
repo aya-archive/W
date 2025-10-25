@@ -162,7 +162,7 @@ def create_gradio_interface():
     def run_prediction(csv_file):
         """Run churn prediction"""
         if csv_file is None:
-            return "Please upload a CSV file first.", None, None, None
+            return "Please upload a CSV file first.", None, None, None, None
         
         try:
             # Load the uploaded CSV file
@@ -201,11 +201,15 @@ def create_gradio_interface():
             # Create prediction data for charts
             prediction_data = [[p["Customer ID"], p["Churn Probability"], p["Risk Level"]] for p in predictions]
             
+            # Create the actual chart objects
+            pie_chart = create_churn_distribution_pie(prediction_data)
+            bar_chart = create_key_metrics_bar(prediction_data)
+            
             status_msg = f"✅ Prediction complete! Analyzed {n_customers} customers."
-            return status_msg, results_df, risk_counts.to_dict(), prediction_data
+            return status_msg, results_df, risk_counts.to_dict(), pie_chart, bar_chart
             
         except Exception as e:
-            return f"❌ Error: {str(e)}", None, None, None
+            return f"❌ Error: {str(e)}", None, None, None, None
     
     
     # Create Gradio interface
