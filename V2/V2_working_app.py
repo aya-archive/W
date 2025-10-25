@@ -26,9 +26,9 @@ logger = logging.getLogger(__name__)
 def create_churn_distribution_pie(prediction_data=None):
     """Create pie chart for churn distribution"""
     if prediction_data is None or len(prediction_data) == 0:
-        # Default empty state
+        # Default empty state - make it more visible
         labels = ['No Data Available']
-        values = [1]
+        values = [100]  # Make it a full pie slice
         colors = ['#CCCCCC']
     else:
         # Count risk levels from prediction data
@@ -66,9 +66,9 @@ def create_churn_distribution_pie(prediction_data=None):
 def create_key_metrics_bar(prediction_data=None):
     """Create bar chart for key metrics"""
     if prediction_data is None or len(prediction_data) == 0:
-        # Default empty state
+        # Default empty state - make it more visible
         categories = ['No Data Available']
-        values = [1]
+        values = [100]  # Make it a visible bar
         colors = ['#CCCCCC']
     else:
         # Count risk levels from prediction data
