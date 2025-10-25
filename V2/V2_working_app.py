@@ -197,6 +197,11 @@ def create_gradio_interface():
             # Clear button
             clear_btn = gr.Button("🔄 Clear Chat", variant="secondary")
         
+        # Playbook Tab
+        with gr.Tab("📋 Playbook"):
+            gr.Markdown("### 📋 Playbook")
+            gr.Markdown("Coming soon...")
+        
         # Event Handlers
         # Dashboard events
         
