@@ -13,11 +13,93 @@ import logging
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from V2_local_ai import get_local_ai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Visualization Functions
+def create_churn_distribution_pie():
+    """Create pie chart for churn distribution"""
+    # Sample data - in real app, this would come from predictions.csv
+    labels = ['Low Risk', 'Medium Risk', 'High Risk']
+    values = [717, 374, 156]  # Sample data
+    colors = ['#2E8B57', '#FFD700', '#DC143C']  # Green, Yellow, Red
+    
+    fig = go.Figure(data=[go.Pie(
+        labels=labels,
+        values=values,
+        hole=0.3,
+        marker_colors=colors,
+        textinfo='label+percent',
+        textfont_size=12
+    )])
+    
+    fig.update_layout(
+        title="Churn Risk Distribution",
+        title_x=0.5,
+        font=dict(size=12),
+        showlegend=True,
+        height=400
+    )
+    
+    return fig
+
+def create_key_metrics_bar():
+    """Create bar chart for key metrics"""
+    categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
+    values = [1247, 717, 374, 156]
+    colors = ['#4A90E2', '#2E8B57', '#FFD700', '#DC143C']
+    
+    fig = go.Figure(data=[go.Bar(
+        x=categories,
+        y=values,
+        marker_color=colors,
+        text=values,
+        textposition='auto',
+    )])
+    
+    fig.update_layout(
+        title="Customer Risk Distribution",
+        xaxis_title="Risk Categories",
+        yaxis_title="Number of Customers",
+        title_x=0.5,
+        font=dict(size=12),
+        height=400
+    )
+    
+    return fig
+
+def create_retention_success_rate():
+    """Create retention success rate prediction"""
+    # Sample data - in real app, this would be calculated from model predictions
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    success_rates = [85, 87, 89, 91, 88, 92]  # Sample retention success rates
+    
+    fig = go.Figure(data=[go.Scatter(
+        x=months,
+        y=success_rates,
+        mode='lines+markers',
+        line=dict(color='#4A90E2', width=3),
+        marker=dict(size=8, color='#4A90E2'),
+        name='Retention Success Rate'
+    )])
+    
+    fig.update_layout(
+        title="Predicted Retention Success Rate",
+        xaxis_title="Month",
+        yaxis_title="Success Rate (%)",
+        title_x=0.5,
+        font=dict(size=12),
+        height=400,
+        yaxis=dict(range=[80, 95])
+    )
+    
+    return fig
 
 # Create FastAPI app
 app = FastAPI(
@@ -158,22 +240,39 @@ def create_gradio_interface():
             gr.Markdown("---")
             gr.Markdown("### 📊 Analytics Dashboard")
             
+            # Visualization Charts
             with gr.Row():
-                with gr.Column(scale=2):
-                    # Key Metrics
-                    gr.Markdown("### 🎯 Key Metrics")
-                    gr.Markdown("**Total Customers:** 1,247")
-                    gr.Markdown("**High Risk:** 156")
-                    gr.Markdown("**Medium Risk:** 374")
-                    gr.Markdown("**Low Risk:** 717")
-                
-                with gr.Column(scale=3):
-                    # Status
-                    dashboard_status = gr.Textbox(
-                        label="Dashboard Status",
-                        value="Ready to run analytics",
-                        interactive=False
+                with gr.Column(scale=1):
+                    # Churn Distribution Pie Chart
+                    churn_pie_chart = gr.Plot(
+                        value=create_churn_distribution_pie(),
+                        label="Churn Risk Distribution",
+                        show_label=True
                     )
+                
+                with gr.Column(scale=1):
+                    # Key Metrics Bar Chart
+                    metrics_bar_chart = gr.Plot(
+                        value=create_key_metrics_bar(),
+                        label="Customer Risk Distribution",
+                        show_label=True
+                    )
+            
+            with gr.Row():
+                with gr.Column():
+                    # Retention Success Rate Line Chart
+                    retention_chart = gr.Plot(
+                        value=create_retention_success_rate(),
+                        label="Retention Success Rate Prediction",
+                        show_label=True
+                    )
+            
+            # Status
+            dashboard_status = gr.Textbox(
+                label="Dashboard Status",
+                value="Analytics dashboard loaded with interactive charts",
+                interactive=False
+            )
         
         
         # AI Chatbot Tab
