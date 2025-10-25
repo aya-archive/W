@@ -23,12 +23,26 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Visualization Functions
-def create_churn_distribution_pie():
+def create_churn_distribution_pie(prediction_data=None):
     """Create pie chart for churn distribution"""
-    # Sample data - in real app, this would come from predictions.csv
-    labels = ['Low Risk', 'Medium Risk', 'High Risk']
-    values = [717, 374, 156]  # Sample data
-    colors = ['#2E8B57', '#FFD700', '#DC143C']  # Green, Yellow, Red
+    if prediction_data is None or len(prediction_data) == 0:
+        # Default empty state
+        labels = ['No Data Available']
+        values = [1]
+        colors = ['#CCCCCC']
+    else:
+        # Count risk levels from prediction data
+        risk_counts = {'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0}
+        
+        for row in prediction_data:
+            if len(row) >= 3:  # Ensure we have at least 3 columns
+                risk_level = row[2]  # Risk Level is the 3rd column
+                if risk_level in risk_counts:
+                    risk_counts[risk_level] += 1
+        
+        labels = list(risk_counts.keys())
+        values = list(risk_counts.values())
+        colors = ['#2E8B57', '#FFD700', '#DC143C']  # Green, Yellow, Red
     
     fig = go.Figure(data=[go.Pie(
         labels=labels,
@@ -122,10 +136,14 @@ def create_gradio_interface():
     """Create working Gradio interface"""
     
     
+    def update_pie_chart(prediction_data):
+        """Update pie chart with prediction data"""
+        return create_churn_distribution_pie(prediction_data)
+    
     def run_prediction(csv_file):
         """Run churn prediction"""
         if csv_file is None:
-            return "Please upload a CSV file first.", None, None
+            return "Please upload a CSV file first.", None, None, None
         
         try:
             # Load the uploaded CSV file
@@ -161,11 +179,14 @@ def create_gradio_interface():
             # Create simple chart data
             risk_counts = pd.Series([p["Risk Level"] for p in predictions]).value_counts()
             
+            # Create prediction data for charts
+            prediction_data = [[p["Customer ID"], p["Churn Probability"], p["Risk Level"]] for p in predictions]
+            
             status_msg = f"✅ Prediction complete! Analyzed {n_customers} customers."
-            return status_msg, results_df, risk_counts.to_dict()
+            return status_msg, results_df, risk_counts.to_dict(), prediction_data
             
         except Exception as e:
-            return f"❌ Error: {str(e)}", None, None
+            return f"❌ Error: {str(e)}", None, None, None
     
     
     # Create Gradio interface
@@ -246,7 +267,7 @@ def create_gradio_interface():
                     # Churn Distribution Pie Chart
                     churn_pie_chart = gr.Plot(
                         value=create_churn_distribution_pie(),
-                        label="Churn Risk Distribution",
+                        label="Churn Risk Distribution (Run prediction to see data)",
                         show_label=True
                     )
                 
@@ -309,7 +330,7 @@ def create_gradio_interface():
         run_prediction_btn.click(
             run_prediction,
             inputs=[csv_file],
-            outputs=[newai_status, results_table, risk_chart]
+            outputs=[newai_status, results_table, risk_chart, churn_pie_chart]
         )
         
         
