@@ -39,42 +39,6 @@ app.add_middleware(
 def create_gradio_interface():
     """Create working Gradio interface"""
     
-    def load_sample_data():
-        """Load sample data"""
-        try:
-            # Generate sample data
-            np.random.seed(42)
-            n_customers = 100
-            
-            sample_data = {
-                'customerID': [f'CUST_{i:04d}' for i in range(1, n_customers + 1)],
-                'gender': np.random.choice(['Male', 'Female'], n_customers),
-                'SeniorCitizen': np.random.choice([0, 1], n_customers),
-                'Partner': np.random.choice(['Yes', 'No'], n_customers),
-                'Dependents': np.random.choice(['Yes', 'No'], n_customers),
-                'tenure': np.random.randint(1, 60, n_customers),
-                'PhoneService': np.random.choice(['Yes', 'No'], n_customers),
-                'MultipleLines': np.random.choice(['Yes', 'No', 'No phone service'], n_customers),
-                'InternetService': np.random.choice(['DSL', 'Fiber optic', 'No'], n_customers),
-                'OnlineSecurity': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'OnlineBackup': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'DeviceProtection': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'TechSupport': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingTV': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingMovies': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'Contract': np.random.choice(['Month-to-month', 'One year', 'Two year'], n_customers),
-                'PaperlessBilling': np.random.choice(['Yes', 'No'], n_customers),
-                'PaymentMethod': np.random.choice(['Electronic check', 'Mailed check', 'Bank transfer (automatic)', 'Credit card (automatic)'], n_customers),
-                'MonthlyCharges': np.random.uniform(20, 100, n_customers),
-                'TotalCharges': np.random.uniform(100, 5000, n_customers),
-                'Churn': np.random.choice(['Yes', 'No'], n_customers)
-            }
-            
-            df = pd.DataFrame(sample_data)
-            return "✅ Sample data generated successfully!", df.head(10)
-            
-        except Exception as e:
-            return f"❌ Error: {str(e)}", None
     
     def run_prediction(csv_file):
         """Run churn prediction"""
@@ -121,42 +85,6 @@ def create_gradio_interface():
         except Exception as e:
             return f"❌ Error: {str(e)}", None, None
     
-    def generate_sample_csv():
-        """Generate sample CSV data"""
-        try:
-            # Create sample data
-            np.random.seed(42)
-            n_customers = 100
-            
-            sample_data = {
-                'customerID': [f'CUST_{i:04d}' for i in range(1, n_customers + 1)],
-                'gender': np.random.choice(['Male', 'Female'], n_customers),
-                'SeniorCitizen': np.random.choice([0, 1], n_customers),
-                'Partner': np.random.choice(['Yes', 'No'], n_customers),
-                'Dependents': np.random.choice(['Yes', 'No'], n_customers),
-                'tenure': np.random.randint(1, 60, n_customers),
-                'PhoneService': np.random.choice(['Yes', 'No'], n_customers),
-                'MultipleLines': np.random.choice(['Yes', 'No', 'No phone service'], n_customers),
-                'InternetService': np.random.choice(['DSL', 'Fiber optic', 'No'], n_customers),
-                'OnlineSecurity': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'OnlineBackup': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'DeviceProtection': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'TechSupport': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingTV': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'StreamingMovies': np.random.choice(['Yes', 'No', 'No internet service'], n_customers),
-                'Contract': np.random.choice(['Month-to-month', 'One year', 'Two year'], n_customers),
-                'PaperlessBilling': np.random.choice(['Yes', 'No'], n_customers),
-                'PaymentMethod': np.random.choice(['Electronic check', 'Mailed check', 'Bank transfer (automatic)', 'Credit card (automatic)'], n_customers),
-                'MonthlyCharges': np.random.uniform(20, 100, n_customers),
-                'TotalCharges': np.random.uniform(100, 5000, n_customers),
-                'Churn': np.random.choice(['Yes', 'No'], n_customers)
-            }
-            
-            sample_df = pd.DataFrame(sample_data)
-            return sample_df.to_csv(index=False)
-            
-        except Exception as e:
-            return ""
     
     # Create Gradio interface
     with gr.Blocks(
@@ -187,19 +115,11 @@ def create_gradio_interface():
                     gr.Markdown("**Low Risk:** 717")
                 
                 with gr.Column(scale=3):
-                    # Sample Data Controls
-                    gr.Markdown("### 📈 Sample Data")
-                    load_sample_btn = gr.Button("📊 Load Sample Data", variant="primary")
+                    # Status
                     dashboard_status = gr.Textbox(
                         label="Dashboard Status",
-                        value="Ready to load data and run analytics",
+                        value="Ready to run analytics",
                         interactive=False
-                    )
-                    sample_data_display = gr.Dataframe(
-                        headers=["Customer ID", "Gender", "Tenure", "Monthly Charges"],
-                        datatype=["str", "str", "number", "number"],
-                        interactive=False,
-                        label="Sample Data Preview"
                     )
         
         # NewAI Tab
@@ -227,7 +147,6 @@ def create_gradio_interface():
                     # Action Buttons
                     with gr.Row():
                         run_prediction_btn = gr.Button("🚀 Run NewAI Prediction", variant="primary")
-                        download_sample_btn = gr.Button("📥 Download Sample CSV", variant="secondary")
                     
                     # Status
                     newai_status = gr.Textbox(
@@ -280,10 +199,6 @@ def create_gradio_interface():
         
         # Event Handlers
         # Dashboard events
-        load_sample_btn.click(
-            load_sample_data,
-            outputs=[dashboard_status, sample_data_display]
-        )
         
         # NewAI events
         run_prediction_btn.click(
@@ -292,10 +207,6 @@ def create_gradio_interface():
             outputs=[newai_status, results_table, risk_chart]
         )
         
-        download_sample_btn.click(
-            generate_sample_csv,
-            outputs=gr.File(label="Download Sample CSV")
-        )
         
         # Chatbot events
         def respond(message, history):

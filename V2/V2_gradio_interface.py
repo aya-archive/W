@@ -28,34 +28,6 @@ class V2GradioInterface:
         self.customer_data = pd.DataFrame()
         self.data_loaded = False
     
-    def load_sample_data(self) -> str:
-        """Load sample AURA data"""
-        global customer_data, data_loaded
-        
-        try:
-            # Generate sample data
-            np.random.seed(42)
-            n_customers = 500
-            
-            self.customer_data = pd.DataFrame({
-                'customer_id': [f'CUST_{i:04d}' for i in range(1, n_customers + 1)],
-                'name': [f'Customer {i}' for i in range(1, n_customers + 1)],
-                'segment': np.random.choice(['SMB', 'Medium-Value', 'High-Value'], n_customers, p=[0.5, 0.3, 0.2]),
-                'subscription_plan': np.random.choice(['Basic', 'Standard', 'Premium', 'Enterprise'], n_customers, p=[0.3, 0.4, 0.2, 0.1]),
-                'current_health_score': np.clip(np.random.normal(60, 20, n_customers), 0, 100),
-                'churn_risk_level': np.random.choice(['Low', 'Medium', 'High'], n_customers, p=[0.6, 0.3, 0.1]),
-                'total_lifetime_revenue': np.random.lognormal(8, 1, n_customers),
-                'engagement_score': np.random.uniform(0, 1, n_customers),
-                'days_since_last_engagement': np.random.randint(1, 90, n_customers),
-                'total_support_tickets_lifetime': np.random.poisson(3, n_customers)
-            })
-            
-            self.data_loaded = True
-            return "✅ Sample data generated successfully!"
-            
-        except Exception as e:
-            logger.error(f"❌ Error loading sample data: {e}")
-            return f"❌ Error loading sample data: {str(e)}"
     
     def upload_csv_data(self, csv_files) -> str:
         """Upload and process CSV files"""
@@ -196,16 +168,10 @@ class V2GradioInterface:
                             gr.Markdown("**F1 Score:** 90.5%")
                     
                     with gr.Column(scale=3):
-                        # Sample Data Controls
-                        gr.Markdown("### 📈 Data Management")
-                        with gr.Row():
-                            load_sample_btn = gr.Button("📊 Load Sample Data", variant="primary")
-                            upload_csv_btn = gr.Button("📁 Upload CSV Files", variant="secondary")
-                        
                         # Status
                         dashboard_status = gr.Textbox(
                             label="Dashboard Status",
-                            value="Ready to load data and run analytics",
+                            value="Ready to run analytics",
                             interactive=False
                         )
             
@@ -305,10 +271,6 @@ class V2GradioInterface:
             
             # Event Handlers
             # Dashboard events
-            load_sample_btn.click(
-                self.load_sample_data,
-                outputs=[dashboard_status]
-            )
             
             # NewAI events
             run_prediction_btn.click(
