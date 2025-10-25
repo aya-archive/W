@@ -1,13 +1,7 @@
 {
-	"folders": [
-		{
-			"name": "AURA",
-			"path": "."
-		},
-		{
-			"name": "NewAI",
-			"path": "../Desktop/NewAI"
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }
