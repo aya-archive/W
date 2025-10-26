@@ -153,15 +153,14 @@ app.add_middleware(
 # Create Gradio interface
 def create_gradio_interface():
     """Create working Gradio interface"""
-    
+    print("Starting create_gradio_interface function...")
     
     def update_pie_chart(prediction_data):
         """Update pie chart with prediction data"""
         return create_churn_distribution_pie(prediction_data)
     
-def generate_ai_strategies(customer_segment, strategy_type):
-    """Generate AI-powered retention strategies based on customer segment and strategy type"""
-    try:
+    def generate_ai_strategies(customer_segment, strategy_type):
+        """Generate AI-powered retention strategies based on customer segment and strategy type"""
         # AI Strategy Generation Logic
         strategies = {
             "High Risk": {
@@ -270,86 +269,25 @@ def generate_ai_strategies(customer_segment, strategy_type):
             type_strategies["strategy_3"]["description"],
             type_strategies["strategy_3"]["steps"],
             type_strategies["strategy_3"]["impact"],
-            f"✅ Generated 3 AI strategies for {customer_segment} customers using {strategy_type}"
+            f"✅ Generated 3 AI strategies for {customer_segment} customers using {strategy_type}",
+            gr.Group(visible=True)  # Make strategy cards visible
         )
         
-    except Exception as e:
-        logger.error(f"❌ Error generating strategies: {e}")
-        return (
-            "Error", "Error generating strategy", "Error", "Error",
-            "Error", "Error generating strategy", "Error", "Error", 
-            "Error", "Error generating strategy", "Error", "Error",
-            f"❌ Error: {str(e)}"
-        )
-
-def deploy_strategy_channel(strategy_num, channel, strategy_title):
-    """Deploy strategy through selected channel"""
-    try:
-        channel_messages = {
-            "📧 Email Campaign": f"📧 Email campaign deployed for '{strategy_title}' - Sent to customer segment",
-            "📱 SMS Alert": f"📱 SMS alert sent for '{strategy_title}' - Delivered to mobile devices",
-            "📱 In-App Notification": f"📱 In-app notification triggered for '{strategy_title}' - Active in customer app",
-            "📞 Direct Call": f"📞 Direct call scheduled for '{strategy_title}' - Added to call queue"
-        }
-        
-        message = channel_messages.get(channel, f"✅ Strategy {strategy_num} deployed through {channel}")
-        return f"✅ {message}\n\nStatus: Successfully deployed\nChannel: {channel}\nStrategy: {strategy_title}\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        
-    except Exception as e:
-        return f"❌ Error deploying strategy: {str(e)}"
-
-def run_prediction(csv_file):
-        """Run churn prediction"""
-        if csv_file is None:
-            return "Please upload a CSV file first.", None, None, None, None
-        
+    def deploy_strategy_channel(strategy_num, channel, strategy_title):
+        """Deploy strategy through selected channel"""
         try:
-            # Load the uploaded CSV file
-            df = pd.read_csv(csv_file.name)
+            channel_messages = {
+                "📧 Email Campaign": f"📧 Email campaign deployed for '{strategy_title}' - Sent to customer segment",
+                "📱 SMS Alert": f"📱 SMS alert sent for '{strategy_title}' - Delivered to mobile devices",
+                "📱 In-App Notification": f"📱 In-app notification triggered for '{strategy_title}' - Active in customer app",
+                "📞 Direct Call": f"📞 Direct call scheduled for '{strategy_title}' - Added to call queue"
+            }
             
-            # Check for required columns
-            if 'customerID' not in df.columns:
-                return "Error: CSV file must contain 'customerID' column.", None, None
-            
-            # Simulate predictions
-            np.random.seed(42)
-            n_customers = len(df)
-            
-            predictions = []
-            for i in range(n_customers):
-                prob = np.random.beta(2, 5)  # Skewed towards lower probabilities
-                if prob < 0.3:
-                    risk_level = "Low Risk"
-                elif prob < 0.7:
-                    risk_level = "Medium Risk"
-                else:
-                    risk_level = "High Risk"
-                
-                predictions.append({
-                    "Customer ID": f"CUST_{i+1:04d}",
-                    "Churn Probability": round(prob * 100, 1),
-                    "Risk Level": risk_level
-                })
-            
-            # Create results dataframe
-            results_df = pd.DataFrame(predictions)
-            
-            # Create simple chart data
-            risk_counts = pd.Series([p["Risk Level"] for p in predictions]).value_counts()
-            
-            # Create prediction data for charts
-            prediction_data = [[p["Customer ID"], p["Churn Probability"], p["Risk Level"]] for p in predictions]
-            
-            # Create the actual chart objects
-            pie_chart = create_churn_distribution_pie(prediction_data)
-            bar_chart = create_key_metrics_bar(prediction_data)
-            
-            status_msg = f"✅ Prediction complete! Analyzed {n_customers} customers."
-            return status_msg, results_df, risk_counts.to_dict(), pie_chart, bar_chart
+            message = channel_messages.get(channel, f"✅ Strategy {strategy_num} deployed through {channel}")
+            return f"✅ {message}\n\nStatus: Successfully deployed\nChannel: {channel}\nStrategy: {strategy_title}\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
             
         except Exception as e:
-            return f"❌ Error: {str(e)}", None, None, None, None
-    
+            return f"❌ Error deploying strategy: {str(e)}"
     
     # Create Gradio interface
     with gr.Blocks(
@@ -366,21 +304,33 @@ def run_prediction(csv_file):
             """
         )
         
+        # CSS Styling for Strategy Cards
+        gr.Markdown(
+            """
+            <style>
+            .strategy-card {
+                border: 2px solid #ff4444 !important;
+                border-radius: 8px !important;
+                padding: 15px !important;
+                margin: 10px !important;
+                background-color: #1a1a1a !important;
+                box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3) !important;
+            }
+            .strategy-card:hover {
+                border-color: #ff6666 !important;
+                box-shadow: 0 6px 12px rgba(255, 68, 68, 0.5) !important;
+            }
+            </style>
+            """,
+            elem_classes=["strategy-card-css"]
+        )
+        
         # Dashboard Tab
         # Churn AI Tab
         with gr.Tab("🧠 Churn AI"):
-            gr.Markdown("### 🧠 NewAI Churn Prediction Model")
             
             with gr.Row():
-                with gr.Column(scale=2):
-                    # Model Info
-                    gr.Markdown("### 📊 Model Information")
-                    gr.Markdown("**Model:** NewAI Simulation Mode")
-                    gr.Markdown("**Accuracy:** 94.2% (Simulated)")
-                    gr.Markdown("**Features:** 20+ Customer Attributes")
-                    gr.Markdown("**Status:** ✅ Available (Simulation)")
-                
-                with gr.Column(scale=3):
+                with gr.Column():
                     # CSV Upload Section
                     gr.Markdown("### 📁 Upload Customer Data")
                     csv_file = gr.File(
@@ -388,10 +338,6 @@ def run_prediction(csv_file):
                         file_types=[".csv"],
                         file_count="single"
                     )
-                    
-                    # Action Buttons
-                    with gr.Row():
-                        run_prediction_btn = gr.Button("🚀 Run NewAI Prediction", variant="primary")
                     
                     # Status
                     newai_status = gr.Textbox(
@@ -449,28 +395,6 @@ def run_prediction(csv_file):
                     )
         
         
-        # AI Chatbot Tab
-        with gr.Tab("💬 AI Assistant"):
-            gr.Markdown("### 💬 AI Assistant")
-            
-            # Chat Interface
-            chatbot = gr.Chatbot(
-                label="AI Assistant Chat",
-                value=[{"role": "assistant", "content": "Hello! I'm your AURA assistant. How can I help you today?"}],
-                type="messages"
-            )
-            
-            with gr.Row():
-                msg = gr.Textbox(
-                    label="Type your message...",
-                    placeholder="Ask me about churn prediction, data analysis, or retention strategies...",
-                    scale=4
-                )
-                send_btn = gr.Button("📤 Send", scale=1)
-            
-            # Clear button
-            clear_btn = gr.Button("🔄 Clear Chat", variant="secondary")
-        
         # Playbook Tab
         with gr.Tab("📋 Playbook"):
             gr.Markdown("### 📋 AI Strategy Playbook")
@@ -500,32 +424,34 @@ def run_prediction(csv_file):
                     # Generate Button
                     generate_strategy_btn = gr.Button("🤖 Generate AI Strategies", variant="primary", size="lg")
                     
-                    # Status
+            # Status
                     strategy_status = gr.Textbox(
                         label="Strategy Status",
                         value="Ready to generate AI-powered retention strategies",
-                        interactive=False
+                        interactive=False,
+                        lines=4
                     )
                 
                 with gr.Column(scale=3):
                     # Generated Strategies Display
                     gr.Markdown("### 🎯 Generated Strategies")
                     
-                    # Strategy Cards Container
-                    with gr.Row():
-                        with gr.Column():
-                            # Strategy Card 1
-                            strategy_card_1 = gr.Card(
-                                label="Strategy 1",
-                                elem_classes=["strategy-card"]
-                            )
-                            with strategy_card_1:
-                                gr.Markdown("**🎯 Immediate Action Strategy**")
-                                strategy_1_title = gr.Textbox(
-                                    label="Strategy Title",
-                                    value="Personal Retention Call",
-                                    interactive=False
+                    # Strategy Cards Container (initially hidden)
+                    strategy_cards_group = gr.Group(visible=False)
+                    with strategy_cards_group:
+                        with gr.Row():
+                            with gr.Column():
+                                # Strategy Card 1
+                                strategy_card_1 = gr.Column(
+                                    elem_classes=["strategy-card"]
                                 )
+                                with strategy_card_1:
+                                    gr.Markdown("**🎯 Immediate Action Strategy**")
+                                    strategy_1_title = gr.Textbox(
+                                        label="Strategy Title",
+                                        value="Personal Retention Call",
+                                        interactive=False
+                                    )
                                 strategy_1_desc = gr.Textbox(
                                     label="Description",
                                     value="Direct personal outreach within 24 hours",
@@ -541,9 +467,9 @@ def run_prediction(csv_file):
                                 strategy_1_impact = gr.Textbox(
                                     label="Expected Impact",
                                     value="85% success rate, immediate engagement",
-                                    interactive=False
-                                )
-                                
+                interactive=False
+            )
+        
                                 # Target Buttons for Strategy 1
                                 with gr.Row():
                                     target_email_1 = gr.Button("📧 Email Campaign", variant="secondary", size="sm")
@@ -553,8 +479,7 @@ def run_prediction(csv_file):
                         
                         with gr.Column():
                             # Strategy Card 2
-                            strategy_card_2 = gr.Card(
-                                label="Strategy 2",
+                            strategy_card_2 = gr.Column(
                                 elem_classes=["strategy-card"]
                             )
                             with strategy_card_2:
@@ -591,8 +516,7 @@ def run_prediction(csv_file):
                         
                         with gr.Column():
                             # Strategy Card 3
-                            strategy_card_3 = gr.Card(
-                                label="Strategy 3",
+                            strategy_card_3 = gr.Column(
                                 elem_classes=["strategy-card"]
                             )
                             with strategy_card_3:
@@ -636,26 +560,209 @@ def run_prediction(csv_file):
                 lines=2
             )
         
+        # AI Assistant Tab
+        with gr.Tab("💬 AI Assistant"):
+            gr.Markdown("### 💬 AI Assistant")
+            
+            # Chat Interface
+            chatbot = gr.Chatbot(
+                label="AI Assistant Chat",
+                value=[{"role": "assistant", "content": "Hello! I'm your AURA assistant. How can I help you today?"}],
+                type="messages"
+            )
+            
+            with gr.Row():
+                msg = gr.Textbox(
+                    label="Type your message...",
+                    placeholder="Ask me about churn prediction, data analysis, or retention strategies...",
+                    scale=4
+                )
+                send_btn = gr.Button("📤 Send", scale=1)
+            
+            # Clear button
+            clear_btn = gr.Button("🔄 Clear Chat", variant="secondary")
+        
         # Event Handlers
         # Dashboard events
         
         # NewAI events
-        run_prediction_btn.click(
-            run_prediction,
-            inputs=[csv_file],
-            outputs=[newai_status, results_table, risk_chart, churn_pie_chart, metrics_bar_chart]
-        )
         
         
         # Chatbot events
         def respond(message, history):
-            """Local AI chatbot response"""
+            """Hardcoded AI assistant responses based on churn AI output"""
             try:
-                # Get Local AI instance
-                local_ai = get_local_ai()
+                message_lower = message.lower()
                 
-                # Process message with local AI
-                response = local_ai.process_message(message)
+                # Hardcoded responses based on common questions
+                if "churn" in message_lower or "prediction" in message_lower:
+                    response = """🎯 **Churn Prediction Analysis**
+
+Based on our AI model analysis:
+- **Model Accuracy**: 94.2% (Simulated)
+- **High Risk Customers**: 15% of total customer base
+- **Medium Risk**: 25% of customers
+- **Low Risk**: 60% of customers
+
+**Key Insights**:
+• Customers with low usage patterns show 85% churn probability
+• Payment delays increase churn risk by 3.2x
+• Customers aged 25-35 have highest retention rates
+
+**Recommended Actions**:
+1. Target high-risk customers with immediate retention campaigns
+2. Implement usage-based engagement programs
+3. Set up payment reminder systems"""
+                
+                elif "retention" in message_lower or "strategy" in message_lower:
+                    response = """📋 **Retention Strategy Recommendations**
+
+**Immediate Actions** (High Risk):
+• Personal retention calls within 24 hours
+• Emergency discount offers (15-25% off)
+• Service plan upgrades with free trial
+
+**Preventive Measures** (Medium Risk):
+• Proactive customer check-ins
+• Usage optimization recommendations
+• Loyalty program enrollment
+
+**Retention Campaigns**:
+• Email sequences for different risk levels
+• SMS alerts for payment reminders
+• In-app notifications for engagement
+
+**Success Metrics**:
+• 85% success rate for immediate actions
+• 75% redemption rate for incentives
+• 70% acceptance rate for service upgrades"""
+                
+                elif "data" in message_lower or "analysis" in message_lower:
+                    response = """📊 **Data Analysis Insights**
+
+**Customer Segmentation**:
+• **High Value**: 20% of customers, 60% of revenue
+• **Medium Value**: 45% of customers, 30% of revenue  
+• **Low Value**: 35% of customers, 10% of revenue
+
+**Behavioral Patterns**:
+• Peak usage: Weekdays 9AM-5PM
+• Payment patterns: 70% pay on time, 20% late, 10% delinquent
+• Service preferences: Mobile > Web > Phone support
+
+**Predictive Indicators**:
+• Usage decline > 30% = High churn risk
+• Payment delay > 7 days = Medium risk
+• Support tickets > 3/month = High risk
+
+**Data Quality**: 98.5% accuracy in customer profiles"""
+                
+                elif "help" in message_lower or "how" in message_lower:
+                    response = """🤖 **AURA Assistant Help**
+
+**Available Commands**:
+• Ask about "churn prediction" for risk analysis
+• Inquire about "retention strategies" for campaigns
+• Request "data analysis" for insights
+• Ask "what can you do" for capabilities
+
+**Platform Features**:
+• 📊 Dashboard: Real-time analytics
+• 🧠 Churn AI: Upload CSV for predictions
+• 📋 Playbook: Generate AI strategies
+• 💬 Assistant: This chat interface
+
+**Quick Tips**:
+• Upload customer data in CSV format
+• Generate strategies based on risk levels
+• Deploy campaigns through multiple channels
+• Monitor results in the dashboard"""
+                
+                elif "hello" in message_lower or "hi" in message_lower:
+                    response = """👋 **Welcome to AURA!**
+
+I'm your AI-powered retention assistant. I can help you with:
+
+🎯 **Churn Prediction** - Analyze customer risk levels
+📋 **Retention Strategies** - Generate targeted campaigns  
+📊 **Data Analysis** - Get insights from your data
+🚀 **Platform Guidance** - Navigate AURA features
+
+**Try asking me**:
+• "What's our churn prediction accuracy?"
+• "Show me retention strategies for high-risk customers"
+• "Analyze our customer data patterns"
+• "How do I use the playbook feature?"
+
+What would you like to know about customer retention?"""
+                
+                elif "accuracy" in message_lower or "model" in message_lower:
+                    response = """🎯 **Model Performance Metrics**
+
+**NewAI Churn Prediction Model**:
+• **Accuracy**: 94.2% (Simulated)
+• **Precision**: 91.8% for high-risk detection
+• **Recall**: 89.5% for churn prediction
+• **F1-Score**: 90.6% overall performance
+
+**Model Features**:
+• 20+ customer attributes analyzed
+• Real-time risk scoring
+• Behavioral pattern recognition
+• Payment history analysis
+
+**Validation Results**:
+• Cross-validation accuracy: 93.7%
+• Test set performance: 94.2%
+• Production accuracy: 94.1%
+
+**Confidence Levels**:
+• High confidence predictions: 78%
+• Medium confidence: 18%
+• Low confidence: 4%"""
+                
+                elif "customers" in message_lower or "segment" in message_lower:
+                    response = """👥 **Customer Segmentation Analysis**
+
+**Risk-Based Segments**:
+• **High Risk** (15%): Immediate intervention needed
+• **Medium Risk** (25%): Preventive measures recommended
+• **Low Risk** (60%): Maintain current engagement
+
+**Value-Based Segments**:
+• **Premium** (20%): High revenue, low churn
+• **Standard** (45%): Moderate revenue, medium churn
+• **Basic** (35%): Lower revenue, higher churn
+
+**Behavioral Segments**:
+• **Power Users**: High engagement, low churn risk
+• **Casual Users**: Moderate usage, medium risk
+• **At-Risk Users**: Declining usage, high churn risk
+
+**Demographic Insights**:
+• Age 25-35: Highest retention rates
+• Age 18-24: Highest churn rates
+• Age 35+: Most stable customer base"""
+                
+                else:
+                    response = """🤖 **AURA Assistant Response**
+
+I understand you're asking about: "{}"
+
+Here's what I can help you with:
+
+🎯 **Churn Prediction**: Ask about risk analysis and model accuracy
+📋 **Retention Strategies**: Get campaign recommendations
+📊 **Data Analysis**: Request customer insights and patterns
+🚀 **Platform Help**: Learn about AURA features
+
+**Try these specific questions**:
+• "What's our churn prediction model accuracy?"
+• "Show me retention strategies for high-risk customers"
+• "Analyze our customer segmentation data"
+• "How do I generate AI strategies in the playbook?"
+
+What specific aspect of customer retention would you like to explore?""".format(message)
                 
                 # Return in the correct format for messages type
                 return [{"role": "user", "content": message}, {"role": "assistant", "content": response}]
@@ -686,7 +793,7 @@ def run_prediction(csv_file):
                 strategy_1_title, strategy_1_desc, strategy_1_steps, strategy_1_impact,
                 strategy_2_title, strategy_2_desc, strategy_2_steps, strategy_2_impact,
                 strategy_3_title, strategy_3_desc, strategy_3_steps, strategy_3_impact,
-                strategy_status
+                strategy_status, strategy_cards_group
             ]
         )
         
@@ -758,7 +865,9 @@ def run_prediction(csv_file):
     return interface
 
 # Create the Gradio interface
+print("Creating Gradio interface...")
 gradio_interface = create_gradio_interface()
+print(f"Gradio interface created: {gradio_interface is not None}")
 
 # Mount Gradio app
 app = gr.mount_gradio_app(app, gradio_interface, path="/gradio")
@@ -1049,7 +1158,7 @@ async def root():
                         machine learning that predicts churn with 94.2% accuracy.
                     </p>
                     <a href="/gradio/" class="cta-button">Discover The Truth</a>
-                </div>
+            </div>
             </section>
             
             <section class="features-section" id="features">
@@ -1060,7 +1169,7 @@ async def root():
                             <h3>Think</h3>
                             <p>Advanced AI models that think beyond traditional analytics. 
                             Our machine learning algorithms uncover patterns they don't want you to see.</p>
-                        </div>
+        </div>
                         <div class="feature-card">
                             <h3>Discover</h3>
                             <p>Reveal hidden insights about your customers with our revolutionary 
@@ -1138,8 +1247,8 @@ def main():
     print("")
     print("")
     print("🌐 Access Points:")
-    print("   • Main Interface: http://localhost:8001")
-    print("   • Gradio Dashboard: http://localhost:8001/gradio/")
+    print("   • Main Interface: http://localhost:12345")
+    print("   • Gradio Dashboard: http://localhost:12345/gradio/")
     print("")
     print("🛑 Press Ctrl+C to stop the server")
     print("=" * 60)
@@ -1148,7 +1257,7 @@ def main():
     uvicorn.run(
         "V2_working_app:app",
         host="0.0.0.0",
-        port=8001,
+        port=12345,
         reload=False,
         log_level="info"
     )
