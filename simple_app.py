@@ -180,7 +180,7 @@ def create_simple_gradio_interface():
     # Create Gradio interface
     with gr.Blocks(
         title="V2 A.U.R.A - Adaptive User Retention Assistant",
-        theme=gr.themes.Soft()
+        theme=gr.themes.Monochrome()
     ) as interface:
         
         # Header
