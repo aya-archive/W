@@ -938,320 +938,76 @@ app = gr.mount_gradio_app(app, gradio_interface, path="/gradio")
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    """Root endpoint - Gorilla Science inspired design"""
+    """Root endpoint - Redirect to Gradio interface"""
     return """
     <!DOCTYPE html>
     <html>
     <head>
-        <title>AURA - The Science They Want to Hide</title>
+        <title>AURA - Adaptive User Retention Assistant</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="refresh" content="0; url=/gradio/">
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            
             body {
-                font-family: 'Arial Black', Arial, sans-serif;
-                background: #000;
-                color: #fff;
-                overflow-x: hidden;
-            }
-            
-            .header {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                backdrop-filter: blur(10px);
-                z-index: 1000;
-                padding: 20px 0;
-                border-bottom: 2px solid #ff0000;
-            }
-            
-            .nav {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-            
-            .logo {
-                font-size: 2em;
-                font-weight: bold;
-                color: #ff0000;
-                text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
-            }
-            
-            .nav-links {
-                display: flex;
-                gap: 30px;
-                list-style: none;
-            }
-            
-            .nav-links a {
-                color: #fff;
-                text-decoration: none;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                transition: color 0.3s ease;
-            }
-            
-            .nav-links a:hover {
-                color: #ff0000;
-            }
-            
-            .hero {
-                height: 100vh;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 40px;
+                background: linear-gradient(135deg, #4B0082 0%, #2E8B57 100%);
+                color: white;
+                text-align: center;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: linear-gradient(45deg, #000 0%, #1a1a1a 50%, #000 100%);
-                position: relative;
-                overflow: hidden;
+                min-height: 100vh;
             }
-            
-            .hero::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ff0000" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-                opacity: 0.3;
-            }
-            
-            .hero-content {
-                text-align: center;
-                z-index: 2;
-                position: relative;
-            }
-            
-            .hero h1 {
-                font-size: 4em;
-                margin-bottom: 20px;
-                text-transform: uppercase;
-                letter-spacing: 3px;
-                color: #fff;
-                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-            }
-            
-            .hero h1 .red {
-                color: #ff0000;
-                text-shadow: 3px 3px 6px rgba(255, 0, 0, 0.8);
-            }
-            
-            .hero .subtitle {
-                font-size: 1.5em;
-                margin-bottom: 30px;
-                color: #ccc;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-            }
-            
-            .hero .description {
-                font-size: 1.2em;
-                margin-bottom: 40px;
-                color: #999;
+            .container {
                 max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-                line-height: 1.6;
-            }
-            
-            .cta-button {
-                display: inline-block;
-                background: #ff0000;
-                color: #fff;
-                padding: 20px 40px;
-                text-decoration: none;
-                font-size: 1.3em;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                border: 3px solid #ff0000;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .cta-button::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                transition: left 0.5s ease;
-            }
-            
-            .cta-button:hover::before {
-                left: 100%;
-            }
-            
-            .cta-button:hover {
-                background: transparent;
-                color: #ff0000;
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            }
-            
-            .features-section {
-                padding: 100px 20px;
-                background: #111;
-            }
-            
-            .features-container {
-                max-width: 1200px;
                 margin: 0 auto;
-            }
-            
-            .features-title {
-                text-align: center;
-                font-size: 3em;
-                margin-bottom: 60px;
-                color: #ff0000;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-            }
-            
-            .features-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 40px;
-            }
-            
-            .feature-card {
-                background: #1a1a1a;
+                background: rgba(255, 255, 255, 0.1);
                 padding: 40px;
-                border: 2px solid #333;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
             }
-            
-            .feature-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 4px;
-                background: #ff0000;
-                transform: scaleX(0);
-                transition: transform 0.3s ease;
-            }
-            
-            .feature-card:hover::before {
-                transform: scaleX(1);
-            }
-            
-            .feature-card:hover {
-                border-color: #ff0000;
-                transform: translateY(-10px);
-                box-shadow: 0 20px 40px rgba(255, 0, 0, 0.2);
-            }
-            
-            .feature-card h3 {
-                font-size: 1.5em;
+            h1 {
+                font-size: 3em;
                 margin-bottom: 20px;
-                color: #ff0000;
-                text-transform: uppercase;
-                letter-spacing: 1px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             }
-            
-            .feature-card p {
-                color: #ccc;
-                line-height: 1.6;
+            .subtitle {
+                font-size: 1.2em;
+                margin-bottom: 30px;
+                opacity: 0.9;
             }
-            
-            .footer {
-                background: #000;
-                padding: 40px 20px;
-                text-align: center;
-                border-top: 2px solid #ff0000;
+            .redirect-message {
+                font-size: 1.1em;
+                margin-bottom: 30px;
+                opacity: 0.8;
             }
-            
-            .footer p {
-                color: #666;
-                font-size: 0.9em;
+            .btn {
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 15px 30px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 10px;
+                text-decoration: none;
+                font-size: 1.1em;
+                transition: all 0.3s ease;
+                display: inline-block;
             }
-            
-            @media (max-width: 768px) {
-                .hero h1 {
-                    font-size: 2.5em;
-                }
-                
-                .nav-links {
-                    display: none;
-                }
-                
-                .features-grid {
-                    grid-template-columns: 1fr;
-                }
+            .btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             }
         </style>
     </head>
     <body>
-        <header class="header">
-            <nav class="nav">
-                <div class="logo">AURA</div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
-        
-        <main>
-            <section class="hero" id="home">
-                <div class="hero-content">
-                    <h1>The <span class="red">Science</span> They Want to Hide</h1>
+        <div class="container">
+            <h1>🤖 A.U.R.A</h1>
             <div class="subtitle">Adaptive User Retention Assistant</div>
-                    <p class="description">
-                        The AI-powered platform they don't want you to know about. 
-                        Discover the truth about customer retention with cutting-edge 
-                        machine learning that predicts churn with 94.2% accuracy.
-                    </p>
-                    <a href="/gradio/" class="cta-button">Discover The Truth</a>
-            </div>
-            </section>
-            
-            <section class="features-section" id="features">
-                <div class="features-container">
-                    <h2 class="features-title">The Features They Want to Silence</h2>
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <h3>Think</h3>
-                            <p>Advanced AI models that think beyond traditional analytics. 
-                            Our machine learning algorithms uncover patterns they don't want you to see.</p>
+            <p class="redirect-message">Redirecting to the dashboard...</p>
+            <a href="/gradio/" class="btn">🎨 Open Dashboard</a>
         </div>
-                        <div class="feature-card">
-                            <h3>Discover</h3>
-                            <p>Reveal hidden insights about your customers with our revolutionary 
-                            churn prediction technology that achieves 94.2% accuracy.</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>Rebel</h3>
-                            <p>Break free from conventional retention strategies. Our platform 
-                            gives you the tools to fight back against customer churn.</p>
-                        </div>
-                    </div>
-            </div>
-            </section>
-        </main>
-            
-        <footer class="footer" id="contact">
-            <p>&copy; 2024 AURA. The Science They Want to Hide. All Rights Reserved.</p>
-        </footer>
     </body>
     </html>
     """
