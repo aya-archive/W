@@ -345,36 +345,230 @@ def create_gradio_interface():
         except Exception as e:
             return f"❌ Error processing data: {str(e)}", None, None, None, None
     
-    # Create Gradio interface
+    # Create Gradio interface with dark theme inspired by Gorilla Science
     with gr.Blocks(
         title="A.U.R.A - Adaptive User Retention Assistant",
-        theme=gr.themes.Soft()
+        theme=gr.themes.Default(),
+        css="""
+        /* Dark theme with sky grey background */
+        .gradio-container {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%) !important;
+            color: #ffffff !important;
+        }
+        
+        /* Header styling */
+        .gradio-container h1 {
+            background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            font-weight: bold !important;
+            text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3) !important;
+        }
+        
+        /* Button styling - Dark Indigo */
+        .gradio-button {
+            background: linear-gradient(45deg, #1e3a8a, #1e40af) !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .gradio-button:hover {
+            background: linear-gradient(45deg, #1d4ed8, #2563eb) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4) !important;
+        }
+        
+        /* Input styling */
+        .gradio-textbox, .gradio-dropdown, .gradio-file {
+            background: rgba(52, 73, 94, 0.8) !important;
+            border: 2px solid #4f46e5 !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+        }
+        
+        .gradio-textbox:focus, .gradio-dropdown:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3) !important;
+        }
+        
+        /* Tab styling */
+        .gradio-tab {
+            background: rgba(44, 62, 80, 0.9) !important;
+            border: 1px solid #4f46e5 !important;
+            color: #ffffff !important;
+        }
+        
+        .gradio-tab.selected {
+            background: linear-gradient(45deg, #4f46e5, #6366f1) !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+        }
+        
+        /* Dataframe styling */
+        .gradio-dataframe {
+            background: rgba(52, 73, 94, 0.9) !important;
+            border: 2px solid #4f46e5 !important;
+            color: #ffffff !important;
+        }
+        
+        /* Plot styling */
+        .gradio-plot {
+            background: rgba(52, 73, 94, 0.9) !important;
+            border: 2px solid #4f46e5 !important;
+            border-radius: 8px !important;
+        }
+        
+        /* Strategy cards enhanced */
+        .strategy-card {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important;
+            border: 3px solid #4f46e5 !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            margin: 15px !important;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .strategy-card:hover {
+            border-color: #6366f1 !important;
+            box-shadow: 0 12px 35px rgba(79, 70, 229, 0.5) !important;
+            transform: translateY(-5px) !important;
+        }
+        
+        /* Chat interface */
+        .gradio-chatbot {
+            background: rgba(52, 73, 94, 0.9) !important;
+            border: 2px solid #4f46e5 !important;
+            border-radius: 12px !important;
+        }
+        
+        /* Footer styling */
+        .footer {
+            background: linear-gradient(90deg, #4f46e5, #6366f1) !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            padding: 15px !important;
+            border-radius: 8px !important;
+            margin-top: 20px !important;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px !important;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #34495e !important;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4f46e5, #6366f1) !important;
+            border-radius: 6px !important;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #5b52e8, #7c3aed) !important;
+        }
+        """
     ) as interface:
         
-        # Header
+        # Header with sky grey styling
         gr.Markdown(
             """
-            # 🤖 A.U.R.A - Adaptive User Retention Assistant
-            
-            **Unified AI-Powered Client Retention Platform**
+            <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%); border-radius: 15px; margin-bottom: 20px;">
+                <h1 style="background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 3em; margin: 0; text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3);">
+                    🤖 A.U.R.A
+                </h1>
+                <h2 style="color: #4f46e5; font-size: 1.5em; margin: 10px 0; font-weight: bold;">
+                    Adaptive User Retention Assistant
+                </h2>
+                <p style="color: #ffffff; font-size: 1.2em; margin: 0; opacity: 0.9;">
+                    <strong>Unified AI-Powered Client Retention Platform</strong>
+                </p>
+            </div>
             """
         )
         
-        # CSS Styling for Strategy Cards
+        # Enhanced CSS Styling for Dark Theme
         gr.Markdown(
             """
             <style>
-            .strategy-card {
-                border: 2px solid #ff4444 !important;
-                border-radius: 8px !important;
-                padding: 15px !important;
-                margin: 10px !important;
-                background-color: #1a1a1a !important;
-                box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3) !important;
+            /* Additional dark theme enhancements */
+            .gradio-container {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
             }
+            
+            /* Enhanced strategy cards with sky grey colors */
+            .strategy-card {
+                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important;
+                border: 3px solid #4f46e5 !important;
+                border-radius: 12px !important;
+                padding: 20px !important;
+                margin: 15px !important;
+                box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3) !important;
+                transition: all 0.3s ease !important;
+                position: relative !important;
+                overflow: hidden !important;
+            }
+            
+            .strategy-card::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: -100% !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.1), transparent) !important;
+                transition: left 0.5s ease !important;
+            }
+            
+            .strategy-card:hover::before {
+                left: 100% !important;
+            }
+            
             .strategy-card:hover {
-                border-color: #ff6666 !important;
-                box-shadow: 0 6px 12px rgba(255, 68, 68, 0.5) !important;
+                border-color: #6366f1 !important;
+                box-shadow: 0 12px 35px rgba(79, 70, 229, 0.5) !important;
+                transform: translateY(-5px) !important;
+            }
+            
+            /* Enhanced button animations */
+            .gradio-button {
+                position: relative !important;
+                overflow: hidden !important;
+            }
+            
+            .gradio-button::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                width: 0 !important;
+                height: 0 !important;
+                background: rgba(255, 255, 255, 0.2) !important;
+                border-radius: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                transition: width 0.3s ease, height 0.3s ease !important;
+            }
+            
+            .gradio-button:hover::before {
+                width: 300px !important;
+                height: 300px !important;
+            }
+            
+            /* Glowing effect for important elements */
+            .gradio-textbox:focus, .gradio-dropdown:focus {
+                box-shadow: 0 0 20px rgba(79, 70, 229, 0.5) !important;
+                animation: glow 2s ease-in-out infinite alternate !important;
+            }
+            
+            @keyframes glow {
+                from { box-shadow: 0 0 20px rgba(79, 70, 229, 0.5); }
+                to { box-shadow: 0 0 30px rgba(79, 70, 229, 0.8); }
             }
             </style>
             """,
@@ -915,12 +1109,16 @@ What specific aspect of customer retention would you like to explore?""".format(
             outputs=[channel_status]
         )
         
-        # Footer
+        # Enhanced Footer with Gorilla Science styling
         gr.Markdown(
             """
-            ---
-            <div style="text-align: center; color: #666; font-size: 0.9em;">
-            🤖 A.U.R.A - Adaptive User Retention Assistant | Built with FastAPI + Gradio | Unified Platform
+            <div style="text-align: center; background: linear-gradient(90deg, #4f46e5, #6366f1); color: #ffffff; font-weight: bold; padding: 20px; border-radius: 12px; margin-top: 30px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);">
+                <div style="font-size: 1.2em; margin-bottom: 10px;">
+                    🤖 A.U.R.A - Adaptive User Retention Assistant
+                </div>
+                <div style="font-size: 1em; opacity: 0.8;">
+                    Built with FastAPI + Gradio | Unified Platform | Dark Theme
+                </div>
             </div>
             """,
             elem_classes=["footer"]
@@ -952,7 +1150,7 @@ async def root():
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 margin: 0;
                 padding: 40px;
-                background: linear-gradient(135deg, #4B0082 0%, #2E8B57 100%);
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
                 color: white;
                 text-align: center;
                 display: flex;
@@ -963,15 +1161,21 @@ async def root():
             .container {
                 max-width: 600px;
                 margin: 0 auto;
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(52, 73, 94, 0.9);
                 padding: 40px;
                 border-radius: 20px;
                 backdrop-filter: blur(10px);
+                border: 3px solid #4f46e5;
+                box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
             }
             h1 {
                 font-size: 3em;
                 margin-bottom: 20px;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3);
             }
             .subtitle {
                 font-size: 1.2em;
@@ -984,20 +1188,22 @@ async def root():
                 opacity: 0.8;
             }
             .btn {
-                background: rgba(255, 255, 255, 0.2);
-                color: white;
+                background: linear-gradient(45deg, #1e3a8a, #1e40af);
+                color: #ffffff;
                 padding: 15px 30px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
+                border: 2px solid #1e3a8a;
                 border-radius: 10px;
                 text-decoration: none;
                 font-size: 1.1em;
+                font-weight: bold;
                 transition: all 0.3s ease;
                 display: inline-block;
+                box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
             }
             .btn:hover {
-                background: rgba(255, 255, 255, 0.3);
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                background: linear-gradient(45deg, #1d4ed8, #2563eb);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
             }
         </style>
     </head>
@@ -1047,17 +1253,17 @@ def main():
     print("")
     print("")
     print("🌐 Access Points:")
-    print("   • Main Interface: http://localhost:8080")
-    print("   • Gradio Dashboard: http://localhost:8080/gradio/")
+    print("   • Main Interface: http://localhost:8887")
+    print("   • Gradio Dashboard: http://localhost:8887/gradio/")
     print("")
     print("🛑 Press Ctrl+C to stop the server")
     print("=" * 60)
     
-    # Run the application
+    # Run the application on port 8887
     uvicorn.run(
         "working_app:app",
         host="0.0.0.0",
-        port=8080,
+        port=8887,
         reload=False,
         log_level="info"
     )
