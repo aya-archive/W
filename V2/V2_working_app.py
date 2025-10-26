@@ -319,11 +319,11 @@ def run_prediction(csv_file):
             for i in range(n_customers):
                 prob = np.random.beta(2, 5)  # Skewed towards lower probabilities
                 if prob < 0.3:
-                    risk_level = "Low"
+                    risk_level = "Low Risk"
                 elif prob < 0.7:
-                    risk_level = "Medium"
+                    risk_level = "Medium Risk"
                 else:
-                    risk_level = "High"
+                    risk_level = "High Risk"
                 
                 predictions.append({
                     "Customer ID": f"CUST_{i+1:04d}",
