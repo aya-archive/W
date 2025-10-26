@@ -8,16 +8,15 @@ AURA is a comprehensive, production-ready platform that combines FastAPI backend
 
 ```
 AURA Platform
-├── V2_working_app.py          # 🎯 Main FastAPI + Gradio app (Port 8080)
-├── V2_main_app.py            # 🔧 Modular FastAPI app (Port 8000)
-├── V2_simple_app.py          # 🚀 Simplified working app (Port 8000)
-├── V2_gradio_interface.py    # 🎨 Gradio UI components
-├── V2_newai_service.py       # 🧠 AI model service
-├── V2_api_routes.py          # 🔌 RESTful API endpoints
-├── V2_local_ai.py            # 🤖 Ollama AI integration
-├── V2_models/                # 📁 AI model files
-├── V2_data/                  # 📊 Sample data
-└── V2_requirements.txt       # 📦 Dependencies
+├── working_app.py          # 🎯 Main FastAPI + Gradio app (Port 8080)
+├── main_app.py            # 🔧 Modular FastAPI app (Port 8000)
+├── simple_app.py          # 🚀 Simplified working app (Port 8000)
+├── gradio_interface.py    # 🎨 Gradio UI components
+├── newai_service.py       # 🧠 AI model service
+├── api_routes.py          # 🔌 RESTful API endpoints
+├── models/                # 📁 AI model files
+├── data/                  # 📊 Sample data
+└── requirements.txt       # 📦 Dependencies
 ```
 
 ## ✨ **Key Features**
@@ -36,7 +35,6 @@ AURA Platform
 - **Plotly**: Interactive charts and visualizations
 - **Pandas & NumPy**: Advanced data processing and analysis
 - **Scikit-learn**: Machine learning model integration
-- **Ollama**: Local AI model integration (optional)
 
 ### **📊 Visual Design**
 - **Indigo Color Scheme**: Professional indigo (#4B0082) accent colors
@@ -115,8 +113,6 @@ python V2_simple_app.py
 - `GET /docs` - Interactive API documentation
 - `GET /api/v2/health` - Health check endpoint
 - `GET /api/v2/info` - Model information and capabilities
-- `GET /api/v2/ai-info` - Local AI model information
-- `GET /api/v2/ai-test` - Test Ollama AI connection
 
 ### **Data Processing**
 - `POST /api/v2/predict` - Run churn predictions
@@ -176,23 +172,22 @@ V2/
 ├── V2_working_app.py         # Main application (recommended)
 ├── V2_main_app.py           # Modular architecture
 ├── V2_simple_app.py         # Simplified version
-├── V2_gradio_interface.py   # UI components
-├── V2_newai_service.py      # AI model service
-├── V2_api_routes.py         # API endpoints
-├── V2_local_ai.py           # Ollama integration
-├── V2_models/               # AI model files
+├── gradio_interface.py    # UI components
+├── api_routes.py          # API endpoints
+├── newai_service.py       # AI model service
+├── models/                # AI model files
 │   ├── aura_churn_model.pkl
 │   └── preprocess.pkl
-├── V2_data/                 # Sample data
+├── data/                  # Sample data
 │   └── customers.csv
-├── V2_requirements.txt      # Dependencies
-└── logo.jpeg               # Logo file (optional)
+├── requirements.txt       # Dependencies
+└── logo.jpeg             # Logo file (optional)
 ```
 
 ### **Adding Features**
-1. **UI Components**: Modify `V2_working_app.py` or `V2_gradio_interface.py`
-2. **API Endpoints**: Add to `V2_api_routes.py` or main app file
-3. **AI Logic**: Extend `V2_newai_service.py` or `V2_local_ai.py`
+1. **UI Components**: Modify `working_app.py` or `gradio_interface.py`
+2. **API Endpoints**: Add to `api_routes.py` or main app file
+3. **AI Logic**: Extend `newai_service.py`
 4. **Data Processing**: Add functions to main app or separate service files
 
 ## 🚀 **Production Deployment**

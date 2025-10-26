@@ -18,7 +18,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
-from local_ai import get_local_ai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -1282,26 +1281,6 @@ async def get_model_info():
         "available": True,
         "mode": "simulation"
     }
-
-@app.get("/api/v2/ai-info")
-async def get_ai_info():
-    """Get Local AI information"""
-    try:
-        local_ai = get_local_ai()
-        return local_ai.get_ai_info()
-    except Exception as e:
-        logger.error(f"❌ Error getting AI info: {e}")
-        return {"error": "Failed to get AI information"}
-
-@app.get("/api/v2/ai-test")
-async def test_ai_connection():
-    """Test Ollama AI connection"""
-    try:
-        local_ai = get_local_ai()
-        return local_ai.test_connection()
-    except Exception as e:
-        logger.error(f"❌ Error testing AI connection: {e}")
-        return {"status": "error", "message": f"Connection test failed: {str(e)}"}
 
 def main():
     """Main function to run the Working AURA app"""
