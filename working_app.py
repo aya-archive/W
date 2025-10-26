@@ -18,7 +18,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
-from V2_local_ai import get_local_ai
+from local_ai import get_local_ai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -1320,7 +1320,7 @@ def main():
     
     # Run the application
     uvicorn.run(
-        "V2_working_app:app",
+        "working_app:app",
         host="0.0.0.0",
         port=8080,
         reload=False,

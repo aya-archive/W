@@ -11,7 +11,7 @@ from typing import Dict, List, Optional
 import pandas as pd
 import json
 import logging
-from V2_newai_service import get_newai_service
+from newai_service import get_newai_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

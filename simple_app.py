@@ -547,7 +547,7 @@ def main():
     
     # Run the application
     uvicorn.run(
-        "V2_simple_app:app",
+        "simple_app:app",
         host="0.0.0.0",
         port=8000,
         reload=False,

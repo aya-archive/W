@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 from typing import Dict, List, Optional, Tuple
-from V2_newai_service import get_newai_service
+from newai_service import get_newai_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

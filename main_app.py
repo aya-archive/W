@@ -17,9 +17,9 @@ from pathlib import Path
 import json
 
 # Import V2 components
-from V2_gradio_interface import create_v2_gradio_interface
-from V2_api_routes import router as api_router
-from V2_newai_service import get_newai_service
+from gradio_interface import create_v2_gradio_interface
+from api_routes import router as api_router
+from newai_service import get_newai_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -268,7 +268,7 @@ def main():
     
     # Run the application
     uvicorn.run(
-        "V2_main_app:app",
+        "main_app:app",
         host="0.0.0.0",
         port=8000,
         reload=False,
