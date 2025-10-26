@@ -8,6 +8,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import gradio as gr
 import logging
 import pandas as pd
@@ -16,6 +17,7 @@ from pathlib import Path
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from datetime import datetime
 from V2_local_ai import get_local_ai
 
 # Configure logging
@@ -69,7 +71,7 @@ def create_key_metrics_bar(prediction_data=None):
         # Default empty state - show sample data to make it visible
         categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
         values = [1000, 600, 300, 100]  # Sample data
-        colors = ['#4A90E2', '#2E8B57', '#FFD700', '#DC143C']
+        colors = ['#4B0082', '#2E8B57', '#FFD700', '#DC143C']
     else:
         # Count risk levels from prediction data
         risk_counts = {'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0}
@@ -86,7 +88,7 @@ def create_key_metrics_bar(prediction_data=None):
         # Create categories and values
         categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
         values = [total_customers, risk_counts['Low Risk'], risk_counts['Medium Risk'], risk_counts['High Risk']]
-        colors = ['#4A90E2', '#2E8B57', '#FFD700', '#DC143C']
+        colors = ['#4B0082', '#2E8B57', '#FFD700', '#DC143C']
     
     fig = go.Figure(data=[go.Bar(
         x=categories,
@@ -117,8 +119,8 @@ def create_retention_success_rate():
         x=months,
         y=success_rates,
         mode='lines+markers',
-        line=dict(color='#4A90E2', width=3),
-        marker=dict(size=8, color='#4A90E2'),
+        line=dict(color='#4B0082', width=3),
+        marker=dict(size=8, color='#4B0082'),
         name='Retention Success Rate'
     )])
     
@@ -149,6 +151,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add static file serving for logo and other assets
+app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Create Gradio interface
 def create_gradio_interface():
@@ -289,6 +294,58 @@ def create_gradio_interface():
         except Exception as e:
             return f"❌ Error deploying strategy: {str(e)}"
     
+    def process_data(csv_file):
+        """Process uploaded CSV data and generate predictions"""
+        if csv_file is None:
+            return "Please upload a CSV file first.", None, None, None, None
+        
+        try:
+            # Load the uploaded CSV file
+            df = pd.read_csv(csv_file.name)
+            
+            # Check for required columns
+            if 'customerID' not in df.columns:
+                return "Error: CSV file must contain 'customerID' column.", None, None, None, None
+            
+            # Simulate predictions
+            np.random.seed(42)
+            n_customers = len(df)
+            
+            predictions = []
+            for i in range(n_customers):
+                prob = np.random.beta(2, 5)  # Skewed towards lower probabilities
+                if prob < 0.3:
+                    risk_level = "Low Risk"
+                elif prob < 0.7:
+                    risk_level = "Medium Risk"
+                else:
+                    risk_level = "High Risk"
+                
+                predictions.append({
+                    "Customer ID": f"CUST_{i+1:04d}",
+                    "Churn Probability": round(prob * 100, 1),
+                    "Risk Level": risk_level
+                })
+            
+            # Create results dataframe
+            results_df = pd.DataFrame(predictions)
+            
+            # Create simple chart data
+            risk_counts = pd.Series([p["Risk Level"] for p in predictions]).value_counts()
+            
+            # Create prediction data for charts
+            prediction_data = [[p["Customer ID"], p["Churn Probability"], p["Risk Level"]] for p in predictions]
+            
+            # Create the actual chart objects
+            pie_chart = create_churn_distribution_pie(prediction_data)
+            bar_chart = create_key_metrics_bar(prediction_data)
+            
+            status_msg = f"✅ Data processed successfully! Analyzed {n_customers} customers."
+            return status_msg, results_df, risk_counts.to_dict(), pie_chart, bar_chart
+            
+        except Exception as e:
+            return f"❌ Error processing data: {str(e)}", None, None, None, None
+    
     # Create Gradio interface
     with gr.Blocks(
         title="A.U.R.A - Adaptive User Retention Assistant",
@@ -338,6 +395,9 @@ def create_gradio_interface():
                         file_types=[".csv"],
                         file_count="single"
                     )
+                    
+                    # Process Data Button
+                    process_data_btn = gr.Button("📊 Process Data", variant="primary", size="lg")
                     
                     # Status
                     newai_status = gr.Textbox(
@@ -586,6 +646,11 @@ def create_gradio_interface():
         # Dashboard events
         
         # NewAI events
+        process_data_btn.click(
+            process_data,
+            inputs=[csv_file],
+            outputs=[newai_status, results_table, risk_chart, churn_pie_chart, metrics_bar_chart]
+        )
         
         
         # Chatbot events
@@ -1247,8 +1312,8 @@ def main():
     print("")
     print("")
     print("🌐 Access Points:")
-    print("   • Main Interface: http://localhost:12345")
-    print("   • Gradio Dashboard: http://localhost:12345/gradio/")
+    print("   • Main Interface: http://localhost:8080")
+    print("   • Gradio Dashboard: http://localhost:8080/gradio/")
     print("")
     print("🛑 Press Ctrl+C to stop the server")
     print("=" * 60)
@@ -1257,7 +1322,7 @@ def main():
     uvicorn.run(
         "V2_working_app:app",
         host="0.0.0.0",
-        port=12345,
+        port=8080,
         reload=False,
         log_level="info"
     )
