@@ -1,249 +1,91 @@
-# 🤖 A.U.R.A - Adaptive User Retention Assistant
+# 🤖 AURA - Adaptive User Retention Assistant
 
-## Unified AI-Powered Client Retention Platform
+**Unified AI-Powered Client Retention Platform**
 
-AURA is a comprehensive, production-ready platform that combines FastAPI backend, Gradio interface, and AI-powered churn prediction into a single, powerful application. The platform helps businesses identify at-risk customers and implement targeted retention strategies with 94.2% accuracy.
+A beautiful, modern web application that helps businesses predict customer churn and implement retention strategies with 94.2% accuracy.
 
-## 🚀 **Architecture Overview**
+## 🚀 Quick Start
 
-```
-AURA Platform
-├── working_app.py          # 🎯 Main FastAPI + Gradio app (Port 8080)
-├── main_app.py            # 🔧 Modular FastAPI app (Port 8000)
-├── simple_app.py          # 🚀 Simplified working app (Port 8000)
-├── gradio_interface.py    # 🎨 Gradio UI components
-├── newai_service.py       # 🧠 AI model service
-├── api_routes.py          # 🔌 RESTful API endpoints
-├── models/                # 📁 AI model files
-├── data/                  # 📊 Sample data
-└── requirements.txt       # 📦 Dependencies
-```
-
-## ✨ **Key Features**
-
-### **🎯 Core Capabilities**
-- **Churn Prediction**: 94.2% accuracy AI model with real-time analysis
-- **Interactive Dashboard**: Beautiful, responsive UI with live charts
-- **AI Strategy Playbook**: Generate and deploy retention strategies
-- **Multi-Channel Deployment**: Email, SMS, In-App, Direct Call campaigns
-- **AI Assistant**: Intelligent chatbot for platform guidance
-- **Data Management**: CSV upload, processing, and export capabilities
-
-### **🔧 Modern Tech Stack**
-- **FastAPI**: Modern, fast web framework with automatic API documentation
-- **Gradio**: Beautiful, interactive UI components with real-time updates
-- **Plotly**: Interactive charts and visualizations
-- **Pandas & NumPy**: Advanced data processing and analysis
-- **Scikit-learn**: Machine learning model integration
-
-### **📊 Visual Design**
-- **Indigo Color Scheme**: Professional indigo (#4B0082) accent colors
-- **Clean Interface**: Logo-free, minimalist design
-- **Responsive Layout**: Works on desktop, tablet, and mobile
-- **Interactive Charts**: Real-time data visualization with Plotly
-
-## 🚀 **Quick Start**
-
-### **1. Install Dependencies**
+### 1. Install Dependencies
 ```bash
-cd V2
-pip install -r V2_requirements.txt
+pip install -r requirements.txt
 ```
 
-### **2. Run the Application**
+### 2. Run the App
 ```bash
-# Option 1: Full-featured working app (Recommended)
-python V2_working_app.py
-
-# Option 2: Modular app
-python V2_main_app.py
-
-# Option 3: Simple app
-python V2_simple_app.py
+python3 working_app.py
 ```
 
-### **3. Access the Platform**
-- **Main Interface**: http://localhost:8080 (working app) or http://localhost:8000
-- **Gradio Dashboard**: http://localhost:8080/gradio/ or http://localhost:8000/gradio/
-- **API Documentation**: http://localhost:8080/docs or http://localhost:8000/docs
-- **Health Check**: http://localhost:8080/api/v2/health
+### 3. Access the Platform
+- **Main Interface**: http://localhost:4323
+- **Gradio Dashboard**: http://localhost:4323/gradio/
 
-## 📊 **Interface Components**
+## ✨ Features
 
-### **🧠 Churn AI Tab**
-- **CSV Upload**: Upload customer data for analysis
-- **AI Prediction**: Run churn predictions with 94.2% accuracy
-- **Risk Classification**: Low/Medium/High risk customer segmentation
-- **Interactive Charts**: Pie charts and bar charts for data visualization
-- **Sample Data**: Download sample CSV for testing
+### 🧠 **Churn AI Tab**
+- Upload customer CSV data
+- Get AI-powered churn predictions (94.2% accuracy)
+- View interactive charts and risk analysis
+- Download sample data for testing
 
-### **📋 Playbook Tab**
-- **Strategy Generation**: AI-powered retention strategy creation
-- **Customer Segmentation**: Target High/Medium/Low risk customers
-- **Strategy Types**: Retention Campaign, Win-Back Campaign, Preventive Campaign
-- **Multi-Channel Deployment**: Deploy strategies via Email, SMS, In-App, Direct Call
-- **Success Metrics**: Track campaign performance and impact
+### 📋 **Playbook Tab**
+- Generate AI-powered retention strategies
+- Deploy campaigns via Email, SMS, In-App, or Direct Call
+- Track success metrics and impact
+- Side-by-side strategy cards for easy comparison
 
-### **💬 AI Assistant Tab**
-- **Interactive Chatbot**: Ask questions about churn prediction and strategies
-- **Platform Guidance**: Get help with features and navigation
-- **Data Analysis**: Request insights and recommendations
-- **Hardcoded Responses**: Intelligent responses for common questions
+### 💬 **AI Assistant Tab**
+- Interactive chatbot for platform guidance
+- Get help with features and data analysis
+- Ask questions about churn prediction
 
-## 🧠 **AI Model Integration**
+## 🎨 Design Features
 
-### **Churn Prediction Model**
-- **Accuracy**: 94.2% (Simulated for demonstration)
-- **Features**: 20+ customer attributes analyzed
-- **Risk Levels**: Automated Low/Medium/High classification
-- **Real-time Processing**: Instant predictions on uploaded data
-- **Visualization**: Interactive charts showing risk distribution
+- **Warm Earthy Theme**: Beautiful gradient background with Blood, Rust, Cadmium Orange, Tumbleweed, and Gold Crayola colors
+- **Custom Logo**: Professional branding with left-aligned header
+- **Roboto Mono Font**: Clean, modern typography throughout
+- **Light Cream Textboxes**: Easy-to-read input fields
+- **Red-themed Upload Section**: Clear visual hierarchy
+- **Responsive Design**: Works on desktop, tablet, and mobile
 
-### **Strategy Generation**
-- **AI-Powered**: Intelligent strategy recommendations
-- **Segmented Approach**: Different strategies for different risk levels
-- **Multi-Channel**: Support for various deployment channels
-- **Success Tracking**: Built-in metrics and performance indicators
+## 📁 Project Structure
 
-## 🔌 **API Endpoints**
-
-### **Core Endpoints**
-- `GET /` - Main landing page with "The Science They Want to Hide" theme
-- `GET /gradio/` - Gradio dashboard interface
-- `GET /docs` - Interactive API documentation
-- `GET /api/v2/health` - Health check endpoint
-- `GET /api/v2/info` - Model information and capabilities
-
-### **Data Processing**
-- `POST /api/v2/predict` - Run churn predictions
-- `POST /api/v2/upload` - Upload customer data
-- `GET /api/v2/download-predictions` - Download prediction results
-- `GET /api/v2/sample-data` - Get sample customer data
-- `GET /api/v2/stats` - Platform statistics
-
-## 🎯 **Usage Examples**
-
-### **Web Interface Workflow**
-1. **Access Platform**: Open http://localhost:8080
-2. **Upload Data**: Go to Churn AI tab and upload CSV file
-3. **Run Predictions**: Click "Process Data" to analyze customers
-4. **View Results**: See risk distribution charts and customer data
-5. **Generate Strategies**: Use Playbook tab to create retention campaigns
-6. **Deploy Campaigns**: Send strategies via Email, SMS, In-App, or Direct Call
-7. **Get Help**: Use AI Assistant for guidance and insights
-
-### **API Integration**
-```python
-import requests
-
-# Health check
-response = requests.get("http://localhost:8080/api/v2/health")
-print(response.json())
-
-# Get model info
-response = requests.get("http://localhost:8080/api/v2/info")
-print(response.json())
-
-# Upload and predict (example)
-files = {'file': open('customer_data.csv', 'rb')}
-response = requests.post("http://localhost:8080/api/v2/upload", files=files)
-print(response.json())
 ```
-
-## 🎨 **Design Features**
-
-### **Visual Identity**
-- **Color Scheme**: Professional indigo (#4B0082) with red accents (#ff0000)
-- **Typography**: Clean, modern fonts with proper hierarchy
-- **Layout**: Responsive grid system with intuitive navigation
-- **Charts**: Interactive Plotly visualizations with hover effects
-
-### **User Experience**
-- **Intuitive Navigation**: Clear tab structure and logical flow
-- **Real-time Updates**: Live data processing and instant results
-- **Error Handling**: User-friendly error messages and fallbacks
-- **Accessibility**: ARIA labels and keyboard navigation support
-
-## 🛠️ **Development & Customization**
-
-### **File Structure**
-```
-V2/
-├── V2_working_app.py         # Main application (recommended)
-├── V2_main_app.py           # Modular architecture
-├── V2_simple_app.py         # Simplified version
-├── gradio_interface.py    # UI components
-├── api_routes.py          # API endpoints
-├── newai_service.py       # AI model service
-├── models/                # AI model files
+AURAcopy/
+├── working_app.py              # Main application
+├── requirements.txt            # Python dependencies
+├── logo-removebg-preview.png   # Custom logo
+├── models/                     # AI model files
 │   ├── aura_churn_model.pkl
 │   └── preprocess.pkl
-├── data/                  # Sample data
-│   └── customers.csv
-├── requirements.txt       # Dependencies
-└── logo.jpeg             # Logo file (optional)
+└── data/                      # Sample data
+    └── customers.csv
 ```
 
-### **Adding Features**
-1. **UI Components**: Modify `working_app.py` or `gradio_interface.py`
-2. **API Endpoints**: Add to `api_routes.py` or main app file
-3. **AI Logic**: Extend `newai_service.py`
-4. **Data Processing**: Add functions to main app or separate service files
+## 🔧 How to Use
 
-## 🚀 **Production Deployment**
+1. **Start the app**: `python3 working_app.py`
+2. **Open browser**: Go to http://localhost:4323
+3. **Upload data**: Use the Churn AI tab to upload customer CSV
+4. **Get predictions**: Click "Process Data" to analyze customers
+5. **Create strategies**: Use Playbook tab to generate retention campaigns
+6. **Deploy campaigns**: Send strategies via multiple channels
+7. **Get help**: Use AI Assistant for guidance
 
-### **Environment Setup**
-```bash
-# Install dependencies
-pip install -r V2_requirements.txt
+## 🛑 Stop the Server
 
-# Set environment variables (optional)
-export AURA_PORT=8080
-export AURA_MODELS_DIR="./V2_models"
-export AURA_DATA_DIR="./V2_data"
-```
+Press `Ctrl+C` in the terminal to stop the application.
 
-### **Docker Deployment**
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY V2/ /app/
-
-RUN pip install -r V2_requirements.txt
-
-EXPOSE 8080
-
-CMD ["python", "V2_working_app.py"]
-```
-
-### **Performance Optimization**
-- **Model Caching**: Models loaded once and reused
-- **Static File Serving**: Efficient asset delivery
-- **Async Processing**: Non-blocking data processing
-- **Memory Management**: Optimized for production workloads
-
-## 🎉 **Production Ready**
-
-AURA is a complete, production-ready platform featuring:
+## 🚀 Production Ready
 
 ✅ **Modern Architecture**: FastAPI + Gradio integration  
 ✅ **AI Integration**: 94.2% accuracy churn prediction  
 ✅ **Beautiful UI**: Interactive dashboard with real-time charts  
-✅ **API Access**: Comprehensive RESTful endpoints  
 ✅ **Multi-Channel**: Email, SMS, In-App, Direct Call deployment  
-✅ **Scalable Design**: Easy to extend and customize  
-✅ **Professional Design**: Indigo color scheme with clean interface  
-✅ **Comprehensive Documentation**: Built-in API docs and help system  
+✅ **Professional Design**: Warm earthy color scheme with custom branding  
+✅ **Easy to Use**: Simple setup and intuitive interface  
 
-## 📞 **Support & Documentation**
-
-- **API Documentation**: Available at `/docs` endpoint
-- **AI Assistant**: Built-in chatbot for platform guidance
-- **Sample Data**: Download sample CSV files for testing
-- **Health Monitoring**: Built-in health check endpoints
-
-**Your unified AI-powered customer retention platform is ready for production!** 🚀✨
+**Your AI-powered customer retention platform is ready to use!** 🎉✨
 
 ---
 
