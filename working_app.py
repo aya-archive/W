@@ -30,7 +30,7 @@ def create_churn_distribution_pie(prediction_data=None):
         # Default empty state - show sample data to make it visible
         labels = ['Low Risk', 'Medium Risk', 'High Risk']
         values = [60, 30, 10]  # Sample percentages
-        colors = ['#2E8B57', '#FFD700', '#DC143C']  # Green, Yellow, Red
+        colors = ['#EBC09D', '#F88734', '#920402']  # Gold Crayola, Cadmium Orange, Blood
     else:
         # Count risk levels from prediction data
         risk_counts = {'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0}
@@ -43,7 +43,7 @@ def create_churn_distribution_pie(prediction_data=None):
         
         labels = list(risk_counts.keys())
         values = list(risk_counts.values())
-        colors = ['#2E8B57', '#FFD700', '#DC143C']  # Green, Yellow, Red
+        colors = ['#EBC09D', '#F88734', '#920402']  # Gold Crayola, Cadmium Orange, Blood
     
     fig = go.Figure(data=[go.Pie(
         labels=labels,
@@ -70,7 +70,7 @@ def create_key_metrics_bar(prediction_data=None):
         # Default empty state - show sample data to make it visible
         categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
         values = [1000, 600, 300, 100]  # Sample data
-        colors = ['#4B0082', '#2E8B57', '#FFD700', '#DC143C']
+        colors = ['#920402', '#EBC09D', '#F88734', '#920402']  # Blood, Gold Crayola, Cadmium Orange, Blood
     else:
         # Count risk levels from prediction data
         risk_counts = {'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0}
@@ -87,7 +87,7 @@ def create_key_metrics_bar(prediction_data=None):
         # Create categories and values
         categories = ['Total Customers', 'Low Risk', 'Medium Risk', 'High Risk']
         values = [total_customers, risk_counts['Low Risk'], risk_counts['Medium Risk'], risk_counts['High Risk']]
-        colors = ['#4B0082', '#2E8B57', '#FFD700', '#DC143C']
+        colors = ['#920402', '#EBC09D', '#F88734', '#920402']  # Blood, Gold Crayola, Cadmium Orange, Blood
     
     fig = go.Figure(data=[go.Bar(
         x=categories,
@@ -118,8 +118,8 @@ def create_retention_success_rate():
         x=months,
         y=success_rates,
         mode='lines+markers',
-        line=dict(color='#4B0082', width=3),
-        marker=dict(size=8, color='#4B0082'),
+        line=dict(color='#F88734', width=3),  # Cadmium Orange line
+        marker=dict(size=8, color='#EBC09D'),  # Gold Crayola markers
         name='Retention Success Rate'
     )])
     
@@ -259,19 +259,16 @@ def create_gradio_interface():
         segment_strategies = strategies.get(customer_segment, strategies["High Risk"])
         type_strategies = segment_strategies.get(strategy_type, segment_strategies["Retention Campaign"])
         
-        # Return the three strategies
+        # Return the three strategies (without Implementation Steps)
         return (
             type_strategies["strategy_1"]["title"],
             type_strategies["strategy_1"]["description"],
-            type_strategies["strategy_1"]["steps"],
             type_strategies["strategy_1"]["impact"],
             type_strategies["strategy_2"]["title"],
             type_strategies["strategy_2"]["description"],
-            type_strategies["strategy_2"]["steps"],
             type_strategies["strategy_2"]["impact"],
             type_strategies["strategy_3"]["title"],
             type_strategies["strategy_3"]["description"],
-            type_strategies["strategy_3"]["steps"],
             type_strategies["strategy_3"]["impact"],
             f"✅ Generated 3 AI strategies for {customer_segment} customers using {strategy_type}",
             gr.Group(visible=True)  # Make strategy cards visible
@@ -350,110 +347,171 @@ def create_gradio_interface():
         title="A.U.R.A - Adaptive User Retention Assistant",
         theme=gr.themes.Default(),
         css="""
-        /* Dark theme with sky grey background */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
+        
+        /* New warm earthy color palette theme with interesting gradient background */
         .gradio-container {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%) !important;
-            color: #ffffff !important;
+            background: linear-gradient(135deg, #EBC09D 0%, #D19C8A 25%, #F88734 50%, #C03C13 75%, #920402 100%) !important; /* Gold to Blood gradient */
+            color: #FFFFFF !important; /* White text for contrast */
+            font-family: 'Roboto Mono', monospace !important;
+            min-height: 100vh !important;
         }
         
         /* Header styling */
         .gradio-container h1 {
-            background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5) !important;
+            background: linear-gradient(45deg, #F88734, #C03C13, #920402) !important; /* Cadmium Orange to Blood */
             -webkit-background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
             background-clip: text !important;
             font-weight: bold !important;
-            text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3) !important;
+            text-shadow: 2px 2px 4px rgba(146, 4, 2, 0.3) !important;
         }
         
-        /* Button styling - Dark Indigo */
+        /* Button styling - Cadmium Orange */
         .gradio-button {
-            background: linear-gradient(45deg, #1e3a8a, #1e40af) !important;
+            background: linear-gradient(45deg, #F88734, #C03C13) !important; /* Cadmium Orange to Rust */
             border: none !important;
-            color: #ffffff !important;
+            color: #FFFFFF !important; /* White text */
             font-weight: bold !important;
             border-radius: 8px !important;
             transition: all 0.3s ease !important;
+            font-family: 'Roboto Mono', monospace !important;
+            box-shadow: 0 4px 15px rgba(248, 135, 52, 0.4) !important;
         }
         
         .gradio-button:hover {
-            background: linear-gradient(45deg, #1d4ed8, #2563eb) !important;
+            background: linear-gradient(45deg, #C03C13, #920402) !important; /* Rust to Blood on hover */
             transform: translateY(-2px) !important;
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4) !important;
+            box-shadow: 0 6px 20px rgba(192, 60, 19, 0.6) !important;
         }
         
-        /* Input styling */
+        /* Input styling - Light theme */
         .gradio-textbox, .gradio-dropdown, .gradio-file {
-            background: rgba(52, 73, 94, 0.8) !important;
-            border: 2px solid #4f46e5 !important;
-            color: #ffffff !important;
+            background: #F5F5DC !important; /* Light cream background */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
+            color: #333333 !important; /* Dark grey text */
             border-radius: 8px !important;
         }
         
+        /* Force textbox background override */
+        .gradio-textbox input, .gradio-textbox textarea {
+            background: #F5F5DC !important; /* Light cream background */
+            color: #333333 !important; /* Dark grey text */
+        }
+        
+        /* Override Gradio's internal styling */
+        .gradio-container .gradio-textbox,
+        .gradio-container .gradio-textbox input,
+        .gradio-container .gradio-textbox textarea {
+            background: #F5F5DC !important; /* Light cream background */
+            color: #333333 !important; /* Dark grey text */
+        }
+        
+        /* File upload drop zone styling */
+        .gradio-file-upload, .gradio-file-upload-area {
+            background: rgba(235, 192, 157, 0.9) !important; /* Light Gold background */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
+            color: #920402 !important; /* Blood text */
+            border-radius: 8px !important;
+        }
+        
+        .gradio-file-upload-area:hover {
+            background: rgba(235, 192, 157, 1) !important; /* Full Gold on hover */
+            border-color: #C03C13 !important; /* Rust border on hover */
+        }
+        
+        /* Additional Gradio component styling for warm palette */
+        .gradio-file-upload .gradio-file-upload-area,
+        .gradio-file-upload .gradio-file-upload-area * {
+            background: rgba(235, 192, 157, 0.9) !important; /* Light Gold background */
+            color: #920402 !important; /* Blood text */
+            border: 2px dashed #F88734 !important; /* Cadmium Orange dashed border */
+        }
+        
+        .gradio-file-upload .gradio-file-upload-area:hover {
+            background: rgba(235, 192, 157, 1) !important; /* Full Gold on hover */
+            border-color: #C03C13 !important; /* Rust border on hover */
+        }
+        
+        /* Status textboxes and readonly elements - Light theme */
+        .gradio-textbox[readonly], 
+        .gradio-textbox[disabled],
+        .gradio-textbox.interactive-false {
+            background: #F5F5DC !important; /* Light cream background */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
+            color: #333333 !important; /* Dark grey text */
+        }
+        
+        /* Dataframe styling for warm palette */
+        .gradio-dataframe table,
+        .gradio-dataframe th,
+        .gradio-dataframe td {
+            background: rgba(235, 192, 157, 0.9) !important; /* Light Gold background */
+            color: #920402 !important; /* Blood text */
+            border: 1px solid #F88734 !important; /* Cadmium Orange border */
+        }
+        
+        .gradio-dataframe th {
+            background: rgba(248, 135, 52, 0.2) !important; /* Light Cadmium Orange header */
+            color: #920402 !important; /* Blood text */
+            font-weight: bold !important;
+        }
+        
         .gradio-textbox:focus, .gradio-dropdown:focus {
-            border-color: #6366f1 !important;
-            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3) !important;
+            border-color: #C03C13 !important; /* Rust focus */
+            box-shadow: 0 0 10px rgba(192, 60, 19, 0.3) !important;
         }
         
         /* Tab styling */
         .gradio-tab {
-            background: rgba(44, 62, 80, 0.9) !important;
-            border: 1px solid #4f46e5 !important;
-            color: #ffffff !important;
+            background: rgba(235, 192, 157, 0.8) !important; /* Gold background */
+            border: 1px solid #F88734 !important; /* Cadmium Orange border */
+            color: #920402 !important; /* Blood text */
         }
         
         .gradio-tab.selected {
-            background: linear-gradient(45deg, #4f46e5, #6366f1) !important;
-            color: #ffffff !important;
+            background: linear-gradient(45deg, #F88734, #C03C13) !important; /* Cadmium Orange to Rust */
+            color: #FFFFFF !important; /* White text */
             font-weight: bold !important;
+            font-family: 'Roboto Mono', monospace !important;
         }
         
         /* Dataframe styling */
         .gradio-dataframe {
-            background: rgba(52, 73, 94, 0.9) !important;
-            border: 2px solid #4f46e5 !important;
-            color: #ffffff !important;
+            background: rgba(235, 192, 157, 0.9) !important; /* Gold background */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
+            color: #920402 !important; /* Blood text */
         }
         
         /* Plot styling */
         .gradio-plot {
-            background: rgba(52, 73, 94, 0.9) !important;
-            border: 2px solid #4f46e5 !important;
+            background: rgba(235, 192, 157, 0.9) !important; /* Gold background */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
             border-radius: 8px !important;
         }
         
         /* Strategy cards enhanced */
         .strategy-card {
-            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important;
-            border: 3px solid #4f46e5 !important;
+            background: linear-gradient(135deg, #EBC09D 0%, rgba(209, 156, 138, 0.8) 100%) !important; /* Gold to Tumbleweed gradient */
+            border: 3px solid #F88734 !important; /* Cadmium Orange border */
             border-radius: 12px !important;
-            padding: 20px !important;
-            margin: 15px !important;
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3) !important;
+            padding: 15px !important;
+            margin: 10px !important;
+            box-shadow: 0 6px 20px rgba(248, 135, 52, 0.3) !important;
             transition: all 0.3s ease !important;
         }
         
         .strategy-card:hover {
-            border-color: #6366f1 !important;
-            box-shadow: 0 12px 35px rgba(79, 70, 229, 0.5) !important;
+            border-color: #C03C13 !important; /* Rust hover */
+            box-shadow: 0 12px 35px rgba(192, 60, 19, 0.5) !important;
             transform: translateY(-5px) !important;
         }
         
         /* Chat interface */
         .gradio-chatbot {
-            background: rgba(52, 73, 94, 0.9) !important;
-            border: 2px solid #4f46e5 !important;
+            background: linear-gradient(135deg, #EBC09D 0%, rgba(209, 156, 138, 0.8) 50%, #EBC09D 100%) !important; /* Gold to Tumbleweed gradient */
+            border: 2px solid #F88734 !important; /* Cadmium Orange border */
             border-radius: 12px !important;
-        }
-        
-        /* Footer styling */
-        .footer {
-            background: linear-gradient(90deg, #4f46e5, #6366f1) !important;
-            color: #ffffff !important;
-            font-weight: bold !important;
-            padding: 15px !important;
-            border-radius: 8px !important;
-            margin-top: 20px !important;
         }
         
         /* Scrollbar styling */
@@ -462,54 +520,52 @@ def create_gradio_interface():
         }
         
         ::-webkit-scrollbar-track {
-            background: #34495e !important;
+            background: #EBC09D !important; /* Gold */
         }
         
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #4f46e5, #6366f1) !important;
+            background: linear-gradient(45deg, #F88734, #C03C13) !important; /* Cadmium Orange to Rust */
             border-radius: 6px !important;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, #5b52e8, #7c3aed) !important;
+            background: linear-gradient(45deg, #C03C13, #920402) !important; /* Rust to Blood */
         }
         """
     ) as interface:
         
-        # Header with sky grey styling
+        # Header with new warm earthy color palette styling and logo
         gr.Markdown(
             """
-            <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%); border-radius: 15px; margin-bottom: 20px;">
-                <h1 style="background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 3em; margin: 0; text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3);">
-                    🤖 A.U.R.A
-                </h1>
-                <h2 style="color: #4f46e5; font-size: 1.5em; margin: 10px 0; font-weight: bold;">
-                    Adaptive User Retention Assistant
-                </h2>
-                <p style="color: #ffffff; font-size: 1.2em; margin: 0; opacity: 0.9;">
-                    <strong>Unified AI-Powered Client Retention Platform</strong>
-                </p>
+            <div style="padding: 15px; background: linear-gradient(135deg, #EBC09D 0%, rgba(209, 156, 138, 0.9) 50%, #EBC09D 100%); border-radius: 15px; margin-bottom: 15px;">
+                <div style="display: flex; align-items: center; justify-content: flex-start;">
+                    <img src="/static/logo-removebg-preview.png" alt="AURA Logo" style="height: 80px; margin-right: 20px;">
+                    <div>
+                        <h2 style="color: #920402; margin: 0; font-size: 1.8em; font-weight: bold; text-shadow: 2px 2px 4px rgba(146, 4, 2, 0.3);">Adaptive User Retention Assistant</h2>
+                        <p style="color: #920402; margin: 5px 0 0 0; font-size: 1em; font-weight: 500;">Unified AI-Powered Client Retention Platform</p>
+                    </div>
+                </div>
             </div>
             """
         )
         
-        # Enhanced CSS Styling for Dark Theme
+        # Enhanced CSS Styling for New Color Palette
         gr.Markdown(
             """
             <style>
-            /* Additional dark theme enhancements */
+            /* Additional styling for new color palette */
             .gradio-container {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+                font-family: 'Roboto Mono', monospace !important;
             }
             
-            /* Enhanced strategy cards with sky grey colors */
+            /* Enhanced strategy cards with new warm color palette - smaller size */
             .strategy-card {
-                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important;
-                border: 3px solid #4f46e5 !important;
+                background: linear-gradient(135deg, #EBC09D 0%, rgba(209, 156, 138, 0.8) 100%) !important; /* Gold to Tumbleweed gradient */
+                border: 3px solid #F88734 !important; /* Cadmium Orange border */
                 border-radius: 12px !important;
-                padding: 20px !important;
-                margin: 15px !important;
-                box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3) !important;
+                padding: 15px !important; /* Reduced from 20px */
+                margin: 10px !important; /* Reduced from 15px */
+                box-shadow: 0 6px 20px rgba(248, 135, 52, 0.3) !important; /* Reduced shadow */
                 transition: all 0.3s ease !important;
                 position: relative !important;
                 overflow: hidden !important;
@@ -522,7 +578,7 @@ def create_gradio_interface():
                 left: -100% !important;
                 width: 100% !important;
                 height: 100% !important;
-                background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.1), transparent) !important;
+                background: linear-gradient(90deg, transparent, rgba(192, 60, 19, 0.1), transparent) !important; /* Rust shimmer */
                 transition: left 0.5s ease !important;
             }
             
@@ -531,8 +587,8 @@ def create_gradio_interface():
             }
             
             .strategy-card:hover {
-                border-color: #6366f1 !important;
-                box-shadow: 0 12px 35px rgba(79, 70, 229, 0.5) !important;
+                border-color: #C03C13 !important; /* Rust hover */
+                box-shadow: 0 12px 35px rgba(192, 60, 19, 0.5) !important;
                 transform: translateY(-5px) !important;
             }
             
@@ -549,7 +605,7 @@ def create_gradio_interface():
                 left: 50% !important;
                 width: 0 !important;
                 height: 0 !important;
-                background: rgba(255, 255, 255, 0.2) !important;
+                background: rgba(235, 192, 157, 0.2) !important; /* Gold ripple */
                 border-radius: 50% !important;
                 transform: translate(-50%, -50%) !important;
                 transition: width 0.3s ease, height 0.3s ease !important;
@@ -562,13 +618,74 @@ def create_gradio_interface():
             
             /* Glowing effect for important elements */
             .gradio-textbox:focus, .gradio-dropdown:focus {
-                box-shadow: 0 0 20px rgba(79, 70, 229, 0.5) !important;
+                box-shadow: 0 0 20px rgba(192, 60, 19, 0.5) !important; /* Rust glow */
                 animation: glow 2s ease-in-out infinite alternate !important;
             }
             
-            @keyframes glow {
-                from { box-shadow: 0 0 20px rgba(79, 70, 229, 0.5); }
-                to { box-shadow: 0 0 30px rgba(79, 70, 229, 0.8); }
+            /* Specific textbox styling - Light theme */
+            .gradio-textbox {
+                background: #F5F5DC !important; /* Light cream background */
+                border: 2px solid #F88734 !important; /* Cadmium Orange border */
+                color: #333333 !important; /* Dark grey text */
+                border-radius: 8px !important;
+            }
+            
+            .gradio-textbox input {
+                background: #F5F5DC !important; /* Light cream background */
+                color: #333333 !important; /* Dark grey text */
+            }
+            
+            .gradio-textbox textarea {
+                background: #F5F5DC !important; /* Light cream background */
+                color: #333333 !important; /* Dark grey text */
+            }
+            
+            /* Force override for all textbox states - Light theme */
+            .gradio-textbox[readonly], 
+            .gradio-textbox[disabled],
+            .gradio-textbox.interactive-false,
+            .gradio-textbox.interactive-false input,
+            .gradio-textbox.interactive-false textarea {
+                background: #F5F5DC !important; /* Light cream background */
+                border: 2px solid #F88734 !important; /* Cadmium Orange border */
+                color: #333333 !important; /* Dark grey text */
+            }
+            
+            /* Additional specificity for Gradio's internal structure - Light theme */
+            .gradio-container .gradio-textbox,
+            .gradio-container .gradio-textbox input,
+            .gradio-container .gradio-textbox textarea {
+                background: #F5F5DC !important; /* Light cream background */
+                color: #333333 !important; /* Dark grey text */
+            }
+            
+            /* Red theme for CSV upload section */
+            .red-upload-section h3 {
+                color: #DC143C !important; /* Crimson red */
+                background: linear-gradient(45deg, #DC143C, #B22222) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+                text-shadow: 2px 2px 4px rgba(220, 20, 60, 0.3) !important;
+            }
+            
+            .red-file-upload .gradio-file-upload,
+            .red-file-upload .gradio-file-upload-area {
+                background: rgba(220, 20, 60, 0.1) !important; /* Light crimson background */
+                border: 3px solid #DC143C !important; /* Crimson border */
+                color: #DC143C !important; /* Crimson text */
+                border-radius: 12px !important;
+            }
+            
+            .red-file-upload .gradio-file-upload-area:hover {
+                background: rgba(220, 20, 60, 0.2) !important; /* Darker crimson on hover */
+                border-color: #B22222 !important; /* Darker red border */
+                transform: scale(1.02) !important;
+                box-shadow: 0 8px 25px rgba(220, 20, 60, 0.4) !important;
+            }
+            
+            .red-file-upload .gradio-file-upload-area * {
+                color: #DC143C !important; /* Crimson text for all elements */
             }
             </style>
             """,
@@ -581,12 +698,13 @@ def create_gradio_interface():
             
             with gr.Row():
                 with gr.Column():
-                    # CSV Upload Section
-                    gr.Markdown("### 📁 Upload Customer Data")
+                    # CSV Upload Section with Red Theme
+                    gr.Markdown("### 📁 Upload Customer Data", elem_classes=["red-upload-section"])
                     csv_file = gr.File(
                         label="Choose CSV File",
                         file_types=[".csv"],
-                        file_count="single"
+                        file_count="single",
+                        elem_classes=["red-file-upload"]
                     )
                     
                     # Process Data Button
@@ -594,22 +712,22 @@ def create_gradio_interface():
                     
                     # Status
                     newai_status = gr.Textbox(
-                        label="NewAI Status",
-                        value="Ready to upload CSV file and run NewAI prediction",
+                        label="Aura AI Status",
+                        value="Ready to upload CSV file and run Aura AI prediction",
                         interactive=False
                     )
             
             # Results Section
             with gr.Row():
                 with gr.Column():
-                    gr.Markdown("### 📊 NewAI Results")
+                    gr.Markdown("### 📊 Aura AI Results")
                     
                     # Results Table
                     results_table = gr.Dataframe(
                         headers=["Customer ID", "Churn Probability", "Risk Level"],
                         datatype=["str", "number", "str"],
                         interactive=False,
-                        label="NewAI Churn Prediction Results"
+                        label="Aura AI Churn Prediction Results"
                     )
                     
                     # Risk Distribution
@@ -653,11 +771,11 @@ def create_gradio_interface():
             gr.Markdown("### 📋 AI Strategy Playbook")
             gr.Markdown("Generate personalized retention strategies using AI and deploy them through targeted channels.")
             
+            # Strategy Generation Section
+            gr.Markdown("### 🎯 Generate AI Strategies")
+            
             with gr.Row():
-                with gr.Column(scale=2):
-                    # Strategy Generation Section
-                    gr.Markdown("### 🎯 Generate AI Strategies")
-                    
+                with gr.Column(scale=1):
                     # Customer Selection
                     customer_select = gr.Dropdown(
                         label="Select Customer Segment",
@@ -665,7 +783,8 @@ def create_gradio_interface():
                         value="High Risk",
                         interactive=True
                     )
-                    
+                
+                with gr.Column(scale=1):
                     # Strategy Type Selection
                     strategy_type = gr.Dropdown(
                         label="Strategy Type",
@@ -673,136 +792,124 @@ def create_gradio_interface():
                         value="Retention Campaign",
                         interactive=True
                     )
-                    
+                
+                with gr.Column(scale=1):
                     # Generate Button
                     generate_strategy_btn = gr.Button("🤖 Generate AI Strategies", variant="primary", size="lg")
-                    
+            
             # Status
-                    strategy_status = gr.Textbox(
-                        label="Strategy Status",
-                        value="Ready to generate AI-powered retention strategies",
-                        interactive=False,
-                        lines=4
-                    )
-                
-                with gr.Column(scale=3):
-                    # Generated Strategies Display
-                    gr.Markdown("### 🎯 Generated Strategies")
-                    
-                    # Strategy Cards Container (initially hidden)
-                    strategy_cards_group = gr.Group(visible=False)
-                    with strategy_cards_group:
-                        with gr.Row():
-                            with gr.Column():
-                                # Strategy Card 1
-                                strategy_card_1 = gr.Column(
-                                    elem_classes=["strategy-card"]
-                                )
-                                with strategy_card_1:
-                                    gr.Markdown("**🎯 Immediate Action Strategy**")
-                                    strategy_1_title = gr.Textbox(
-                                        label="Strategy Title",
-                                        value="Personal Retention Call",
-                                        interactive=False
-                                    )
-                                strategy_1_desc = gr.Textbox(
-                                    label="Description",
-                                    value="Direct personal outreach within 24 hours",
-                                    interactive=False,
-                                    lines=3
-                                )
-                                strategy_1_steps = gr.Textbox(
-                                    label="Implementation Steps",
-                                    value="1. Identify high-risk customer\n2. Prepare personalized offer\n3. Schedule immediate call\n4. Follow up within 48 hours",
-                                    interactive=False,
-                                    lines=4
-                                )
-                                strategy_1_impact = gr.Textbox(
-                                    label="Expected Impact",
-                                    value="85% success rate, immediate engagement",
-                interactive=False
+            strategy_status = gr.Textbox(
+                label="Strategy Status",
+                value="Ready to generate AI-powered retention strategies",
+                interactive=False,
+                lines=2
             )
-        
-                                # Target Buttons for Strategy 1
-                                with gr.Row():
-                                    target_email_1 = gr.Button("📧 Email Campaign", variant="secondary", size="sm")
-                                    target_sms_1 = gr.Button("📱 SMS Alert", variant="secondary", size="sm")
-                                    target_app_1 = gr.Button("📱 In-App Notification", variant="secondary", size="sm")
-                                    target_call_1 = gr.Button("📞 Direct Call", variant="secondary", size="sm")
-                        
-                        with gr.Column():
-                            # Strategy Card 2
-                            strategy_card_2 = gr.Column(
-                                elem_classes=["strategy-card"]
+            
+            # Generated Strategies Display
+            gr.Markdown("### 🎯 Generated Strategies")
+            
+            # Strategy Cards Container (initially hidden) - Side by Side Layout
+            strategy_cards_group = gr.Group(visible=False)
+            with strategy_cards_group:
+                with gr.Row(equal_height=True):
+                    # Strategy Card 1
+                    with gr.Column(scale=1):
+                        strategy_card_1 = gr.Column(
+                            elem_classes=["strategy-card"]
+                        )
+                        with strategy_card_1:
+                            gr.Markdown("**🎯 Immediate Action Strategy**")
+                            strategy_1_title = gr.Textbox(
+                                label="Strategy Title",
+                                value="Personal Retention Call",
+                                interactive=False
                             )
-                            with strategy_card_2:
-                                gr.Markdown("**🎁 Incentive-Based Strategy**")
-                                strategy_2_title = gr.Textbox(
-                                    label="Strategy Title",
-                                    value="Personalized Discount Offer",
-                                    interactive=False
-                                )
-                                strategy_2_desc = gr.Textbox(
-                                    label="Description",
-                                    value="Targeted discount based on customer value",
-                                    interactive=False,
-                                    lines=3
-                                )
-                                strategy_2_steps = gr.Textbox(
-                                    label="Implementation Steps",
-                                    value="1. Calculate customer lifetime value\n2. Determine optimal discount\n3. Create personalized offer\n4. Track redemption and impact",
-                                    interactive=False,
-                                    lines=4
-                                )
-                                strategy_2_impact = gr.Textbox(
-                                    label="Expected Impact",
-                                    value="75% redemption rate, increased loyalty",
-                                    interactive=False
-                                )
-                                
-                                # Target Buttons for Strategy 2
-                                with gr.Row():
-                                    target_email_2 = gr.Button("📧 Email Campaign", variant="secondary", size="sm")
-                                    target_sms_2 = gr.Button("📱 SMS Alert", variant="secondary", size="sm")
-                                    target_app_2 = gr.Button("📱 In-App Notification", variant="secondary", size="sm")
-                                    target_call_2 = gr.Button("📞 Direct Call", variant="secondary", size="sm")
-                        
-                        with gr.Column():
-                            # Strategy Card 3
-                            strategy_card_3 = gr.Column(
-                                elem_classes=["strategy-card"]
+                            strategy_1_desc = gr.Textbox(
+                                label="Description",
+                                value="Direct personal outreach within 24 hours",
+                                interactive=False,
+                                lines=2
                             )
-                            with strategy_card_3:
-                                gr.Markdown("**🔄 Service Enhancement Strategy**")
-                                strategy_3_title = gr.Textbox(
-                                    label="Strategy Title",
-                                    value="Service Plan Upgrade",
-                                    interactive=False
-                                )
-                                strategy_3_desc = gr.Textbox(
-                                    label="Description",
-                                    value="Proactive service improvement and upgrade",
-                                    interactive=False,
-                                    lines=3
-                                )
-                                strategy_3_steps = gr.Textbox(
-                                    label="Implementation Steps",
-                                    value="1. Analyze usage patterns\n2. Identify upgrade opportunities\n3. Propose enhanced service\n4. Monitor satisfaction metrics",
-                                    interactive=False,
-                                    lines=4
-                                )
-                                strategy_3_impact = gr.Textbox(
-                                    label="Expected Impact",
-                                    value="70% acceptance rate, improved satisfaction",
-                                    interactive=False
-                                )
-                                
-                                # Target Buttons for Strategy 3
-                                with gr.Row():
-                                    target_email_3 = gr.Button("📧 Email Campaign", variant="secondary", size="sm")
-                                    target_sms_3 = gr.Button("📱 SMS Alert", variant="secondary", size="sm")
-                                    target_app_3 = gr.Button("📱 In-App Notification", variant="secondary", size="sm")
-                                    target_call_3 = gr.Button("📞 Direct Call", variant="secondary", size="sm")
+                            strategy_1_impact = gr.Textbox(
+                                label="Expected Impact",
+                                value="85% success rate, immediate engagement",
+                                interactive=False,
+                                lines=2
+                            )
+                            
+                            # Target Buttons for Strategy 1
+                            with gr.Row():
+                                target_email_1 = gr.Button("📧 Email", variant="secondary", size="sm")
+                                target_sms_1 = gr.Button("📱 SMS", variant="secondary", size="sm")
+                            with gr.Row():
+                                target_app_1 = gr.Button("📱 In-App", variant="secondary", size="sm")
+                                target_call_1 = gr.Button("📞 Call", variant="secondary", size="sm")
+                    
+                    # Strategy Card 2
+                    with gr.Column(scale=1):
+                        strategy_card_2 = gr.Column(
+                            elem_classes=["strategy-card"]
+                        )
+                        with strategy_card_2:
+                            gr.Markdown("**🎁 Incentive-Based Strategy**")
+                            strategy_2_title = gr.Textbox(
+                                label="Strategy Title",
+                                value="Personalized Discount Offer",
+                                interactive=False
+                            )
+                            strategy_2_desc = gr.Textbox(
+                                label="Description",
+                                value="Targeted discount based on customer value",
+                                interactive=False,
+                                lines=2
+                            )
+                            strategy_2_impact = gr.Textbox(
+                                label="Expected Impact",
+                                value="75% redemption rate, increased loyalty",
+                                interactive=False,
+                                lines=2
+                            )
+                            
+                            # Target Buttons for Strategy 2
+                            with gr.Row():
+                                target_email_2 = gr.Button("📧 Email", variant="secondary", size="sm")
+                                target_sms_2 = gr.Button("📱 SMS", variant="secondary", size="sm")
+                            with gr.Row():
+                                target_app_2 = gr.Button("📱 In-App", variant="secondary", size="sm")
+                                target_call_2 = gr.Button("📞 Call", variant="secondary", size="sm")
+                    
+                    # Strategy Card 3
+                    with gr.Column(scale=1):
+                        strategy_card_3 = gr.Column(
+                            elem_classes=["strategy-card"]
+                        )
+                        with strategy_card_3:
+                            gr.Markdown("**🔄 Service Enhancement Strategy**")
+                            strategy_3_title = gr.Textbox(
+                                label="Strategy Title",
+                                value="Service Plan Upgrade",
+                                interactive=False
+                            )
+                            strategy_3_desc = gr.Textbox(
+                                label="Description",
+                                value="Proactive service improvement and upgrade",
+                                interactive=False,
+                                lines=2
+                            )
+                            strategy_3_impact = gr.Textbox(
+                                label="Expected Impact",
+                                value="70% acceptance rate, improved satisfaction",
+                                interactive=False,
+                                lines=2
+                            )
+                            
+                            # Target Buttons for Strategy 3
+                            with gr.Row():
+                                target_email_3 = gr.Button("📧 Email", variant="secondary", size="sm")
+                                target_sms_3 = gr.Button("📱 SMS", variant="secondary", size="sm")
+                            with gr.Row():
+                                target_app_3 = gr.Button("📱 In-App", variant="secondary", size="sm")
+                                target_call_3 = gr.Button("📞 Call", variant="secondary", size="sm")
             
             # Action Channel Status
             gr.Markdown("### 📡 Action Channel Status")
@@ -832,13 +939,12 @@ def create_gradio_interface():
                 )
                 send_btn = gr.Button("📤 Send", scale=1)
             
-            # Clear button
-            clear_btn = gr.Button("🔄 Clear Chat", variant="secondary")
+            # Clear button removed
         
         # Event Handlers
         # Dashboard events
         
-        # NewAI events
+        # Aura AI events
         process_data_btn.click(
             process_data,
             inputs=[csv_file],
@@ -957,7 +1063,7 @@ What would you like to know about customer retention?"""
                 elif "accuracy" in message_lower or "model" in message_lower:
                     response = """🎯 **Model Performance Metrics**
 
-**NewAI Churn Prediction Model**:
+**Aura AI Churn Prediction Model**:
 • **Accuracy**: 94.2% (Simulated)
 • **Precision**: 91.8% for high-risk detection
 • **Recall**: 89.5% for churn prediction
@@ -1038,19 +1144,16 @@ What specific aspect of customer retention would you like to explore?""".format(
             outputs=[msg]
         )
         
-        clear_btn.click(
-            lambda: [{"role": "assistant", "content": "Hello! I'm your AURA assistant. How can I help you today?"}],
-            outputs=[chatbot]
-        )
+        # Clear button event handler removed
         
         # Strategy Generation events
         generate_strategy_btn.click(
             generate_ai_strategies,
             inputs=[customer_select, strategy_type],
             outputs=[
-                strategy_1_title, strategy_1_desc, strategy_1_steps, strategy_1_impact,
-                strategy_2_title, strategy_2_desc, strategy_2_steps, strategy_2_impact,
-                strategy_3_title, strategy_3_desc, strategy_3_steps, strategy_3_impact,
+                strategy_1_title, strategy_1_desc, strategy_1_impact,
+                strategy_2_title, strategy_2_desc, strategy_2_impact,
+                strategy_3_title, strategy_3_desc, strategy_3_impact,
                 strategy_status, strategy_cards_group
             ]
         )
@@ -1109,20 +1212,6 @@ What specific aspect of customer retention would you like to explore?""".format(
             outputs=[channel_status]
         )
         
-        # Enhanced Footer with Gorilla Science styling
-        gr.Markdown(
-            """
-            <div style="text-align: center; background: linear-gradient(90deg, #4f46e5, #6366f1); color: #ffffff; font-weight: bold; padding: 20px; border-radius: 12px; margin-top: 30px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);">
-                <div style="font-size: 1.2em; margin-bottom: 10px;">
-                    🤖 A.U.R.A - Adaptive User Retention Assistant
-                </div>
-                <div style="font-size: 1em; opacity: 0.8;">
-                    Built with FastAPI + Gradio | Unified Platform | Dark Theme
-                </div>
-            </div>
-            """,
-            elem_classes=["footer"]
-        )
     
     return interface
 
@@ -1146,70 +1235,80 @@ async def root():
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="refresh" content="0; url=/gradio/">
         <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                margin: 0;
-                padding: 40px;
-                background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
-                color: white;
-                text-align: center;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-                background: rgba(52, 73, 94, 0.9);
-                padding: 40px;
-                border-radius: 20px;
-                backdrop-filter: blur(10px);
-                border: 3px solid #4f46e5;
-                box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
-            }
-            h1 {
-                font-size: 3em;
-                margin-bottom: 20px;
-                background: linear-gradient(45deg, #4f46e5, #6366f1, #4f46e5);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                text-shadow: 2px 2px 4px rgba(79, 70, 229, 0.3);
-            }
-            .subtitle {
-                font-size: 1.2em;
-                margin-bottom: 30px;
-                opacity: 0.9;
-            }
-            .redirect-message {
-                font-size: 1.1em;
-                margin-bottom: 30px;
-                opacity: 0.8;
-            }
-            .btn {
-                background: linear-gradient(45deg, #1e3a8a, #1e40af);
-                color: #ffffff;
-                padding: 15px 30px;
-                border: 2px solid #1e3a8a;
-                border-radius: 10px;
-                text-decoration: none;
-                font-size: 1.1em;
-                font-weight: bold;
-                transition: all 0.3s ease;
-                display: inline-block;
-                box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-            }
-            .btn:hover {
-                background: linear-gradient(45deg, #1d4ed8, #2563eb);
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
-            }
-        </style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
+    
+    body {
+        font-family: 'Roboto Mono', monospace;
+        margin: 0;
+        padding: 40px;
+        background: linear-gradient(135deg, #EBC09D 0%, #D19C8A 25%, #F88734 50%, #C03C13 75%, #920402 100%); /* Gold to Blood gradient */
+        color: #FFFFFF; /* White text for contrast */
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(235, 192, 157, 0.9); /* Gold container */
+        padding: 40px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 3px solid #F88734; /* Cadmium Orange border */
+        box-shadow: 0 8px 25px rgba(248, 135, 52, 0.3);
+    }
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, #F88734, #C03C13, #920402); /* Cadmium Orange to Blood */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 2px 2px 4px rgba(146, 4, 2, 0.3);
+        font-family: 'Roboto Mono', monospace;
+    }
+    .subtitle {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        color: #F88734; /* Cadmium Orange subtitle */
+        font-family: 'Roboto Mono', monospace;
+    }
+    .redirect-message {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+        opacity: 0.8;
+        color: #920402; /* Blood text */
+        font-family: 'Roboto Mono', monospace;
+    }
+    .btn {
+        background: linear-gradient(45deg, #F88734, #C03C13); /* Cadmium Orange to Rust */
+        color: #FFFFFF; /* White text */
+        padding: 15px 30px;
+        border: 2px solid #F88734; /* Cadmium Orange border */
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(248, 135, 52, 0.3);
+        font-family: 'Roboto Mono', monospace;
+    }
+    .btn:hover {
+        background: linear-gradient(45deg, #C03C13, #920402); /* Rust to Blood on hover */
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(192, 60, 19, 0.5);
+    }
+</style>
     </head>
     <body>
         <div class="container">
-            <h1>🤖 A.U.R.A</h1>
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <img src="/static/logo-removebg-preview.png" alt="AURA Logo" style="height: 160px; margin-right: 20px;">
+            </div>
             <div class="subtitle">Adaptive User Retention Assistant</div>
             <p class="redirect-message">Redirecting to the dashboard...</p>
             <a href="/gradio/" class="btn">🎨 Open Dashboard</a>
@@ -1224,7 +1323,7 @@ async def root():
 async def get_model_info():
     """Get model information"""
     return {
-        "name": "Working NewAI Churn Prediction Model",
+        "name": "Working Aura AI Churn Prediction Model",
         "type": "Machine Learning",
         "version": "2.0.0",
         "features": [
@@ -1253,17 +1352,17 @@ def main():
     print("")
     print("")
     print("🌐 Access Points:")
-    print("   • Main Interface: http://localhost:8887")
-    print("   • Gradio Dashboard: http://localhost:8887/gradio/")
+    print("   • Main Interface: http://localhost:3000")
+    print("   • Gradio Dashboard: http://localhost:3000/gradio/")
     print("")
     print("🛑 Press Ctrl+C to stop the server")
     print("=" * 60)
     
-    # Run the application on port 8887
+    # Run the application on port 3000
     uvicorn.run(
         "working_app:app",
         host="0.0.0.0",
-        port=8887,
+        port=3000,
         reload=False,
         log_level="info"
     )
